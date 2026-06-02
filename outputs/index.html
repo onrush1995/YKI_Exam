@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loaded Landing Page</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --edge: clamp(16px, 4vw, 32px);
+      --button-size: clamp(44px, 9vw, 60px);
+      --fill: 0%;
+      --menu-radius: 0px;
+      --menu-origin-x: calc(100% - max(var(--edge), env(safe-area-inset-right)) - (var(--button-size) / 2));
+      --menu-origin-y: calc(max(var(--edge), env(safe-area-inset-top)) + (var(--button-size) / 2));
+      --scale: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow: hidden;
+      background: #fff;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .page {
+      position: relative;
+      display: grid;
+      height: 100dvh;
+      min-height: 100vh;
+      place-items: center;
+      isolation: isolate;
+    }
+
+    .page::before {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: #000;
+      content: "";
+      transform: scaleY(var(--scale));
+      transform-origin: bottom;
+      will-change: transform;
+    }
+
+    .percent {
+      position: absolute;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      width: 4.2ch;
+      font-size: clamp(64px, 16vw, 150px);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0;
+      line-height: 0.86;
+      opacity: 1;
+      transition: opacity 180ms ease;
+    }
+
+    .is-loaded .percent {
+      opacity: 0;
+    }
+
+    .percent-black {
+      color: #000;
+    }
+
+    .percent-white {
+      color: #fff;
+      clip-path: inset(calc(100% - var(--fill)) 0 0 0);
+    }
+
+    .percent span:last-child {
+      margin-left: 0.04em;
+      font-size: 0.28em;
+      font-weight: 700;
+    }
+
+    .menu-button {
+      position: fixed;
+      top: max(var(--edge), env(safe-area-inset-top));
+      right: max(var(--edge), env(safe-area-inset-right));
+      display: grid;
+      z-index: 3;
+      width: var(--button-size);
+      aspect-ratio: 1;
+      place-items: center;
+      border: 0;
+      background: transparent;
+      color: #fff;
+      opacity: 0;
+      transition: opacity 180ms ease;
+      cursor: pointer;
+      pointer-events: none;
+    }
+
+    .menu-button span,
+    .menu-button::before,
+    .menu-button::after {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      display: block;
+      width: 42%;
+      height: 3px;
+      border-radius: 999px;
+      background: currentColor;
+      content: "";
+      transform: translate(-50%, -50%);
+    }
+
+    .menu-button::before {
+      transform: translate(-50%, calc(-50% - clamp(7px, 1.4vw, 9px)));
+    }
+
+    .menu-button::after {
+      transform: translate(-50%, calc(-50% + clamp(7px, 1.4vw, 9px)));
+    }
+
+    .is-loaded .menu-button {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    body.menu-open .menu-button {
+      color: #000;
+    }
+
+    .menu-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      background: #fff;
+      color: #000;
+      clip-path: circle(var(--menu-radius) at var(--menu-origin-x) var(--menu-origin-y));
+      opacity: 1;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    body.menu-open .menu-panel {
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .menu-list {
+      position: fixed;
+      top: calc(max(var(--edge), env(safe-area-inset-top)) + var(--button-size) + clamp(8px, 2vw, 18px));
+      right: max(var(--edge), env(safe-area-inset-right));
+      display: grid;
+      gap: clamp(8px, 2vw, 14px);
+      max-width: min(70vw, 360px);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      opacity: 0;
+      text-align: right;
+      transform: translateX(18px);
+      transition: opacity 220ms ease 180ms, transform 220ms ease 180ms;
+    }
+
+    body.menu-open .menu-list {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .menu-list a {
+      color: inherit;
+      display: block;
+      font-size: clamp(28px, 6vw, 56px);
+      font-weight: 800;
+      letter-spacing: 0;
+      line-height: 1;
+      text-decoration: none;
+    }
+
+    .footer-banner {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 4;
+      overflow: hidden;
+      border-top: 1px solid currentColor;
+      background: #000;
+      color: #fff;
+      opacity: 0;
+      padding: clamp(10px, 2.4vw, 18px) 0;
+      pointer-events: none;
+      transition: background-color 180ms ease, color 180ms ease, opacity 180ms ease;
+    }
+
+    .is-loaded .footer-banner {
+      opacity: 1;
+    }
+
+    body.menu-open .footer-banner {
+      background: #fff;
+      color: #000;
+    }
+
+    .banner-track {
+      display: flex;
+      width: max-content;
+      animation: marquee 18s linear infinite;
+      will-change: transform;
+    }
+
+    .banner-text {
+      flex: 0 0 auto;
+      padding-right: clamp(36px, 8vw, 96px);
+      font-size: clamp(14px, 2.6vw, 22px);
+      font-weight: 700;
+      letter-spacing: 0;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    @keyframes marquee {
+      to {
+        transform: translateX(-50%);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page" aria-live="polite">
+    <div class="percent percent-black" aria-label="Loading progress">
+      <span class="percent-value">0</span><span>%</span>
+    </div>
+    <div class="percent percent-white" aria-hidden="true">
+      <span class="percent-value">0</span><span>%</span>
+    </div>
+    <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="menu-panel" aria-label="Main menu">
+      <ul class="menu-list">
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <footer class="footer-banner" aria-label="YKI test registration notice">
+      <div class="banner-track">
+        <div class="banner-text"><strong>Registration for the next YKI test is currently open, and the exam will be held on 29 August 2026.</strong></div>
+        <div class="banner-text" aria-hidden="true"><strong>Registration for the next YKI test is currently open, and the exam will be held on 29 August 2026.</strong></div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    const duration = 2000;
+    const frameDelay = 10;
+    const menuFlowDuration = 650;
+    const body = document.body;
+    const root = document.documentElement;
+    const percentValues = document.querySelectorAll(".percent-value");
+    const menuButton = document.querySelector(".menu-button");
+    const startTime = Date.now();
+    let timerId = null;
+    let finishId = null;
+    let menuFlowId = null;
+
+    function paint(progress) {
+      const percentage = Math.min(100, Math.round(progress * 100));
+      const fill = `${(progress * 100).toFixed(3)}%`;
+      root.style.setProperty("--fill", fill);
+      root.style.setProperty("--scale", progress.toFixed(4));
+      body.classList.toggle("is-loaded", progress === 1);
+      percentValues.forEach((value) => {
+        value.textContent = percentage;
+      });
+    }
+
+    function tick() {
+      const progress = Math.min((Date.now() - startTime) / duration, 1);
+      paint(progress);
+
+      if (progress < 1) {
+        timerId = window.setTimeout(tick, frameDelay);
+      } else {
+        timerId = null;
+        finishId = null;
+      }
+    }
+
+    function start() {
+      paint(0);
+      timerId = window.setTimeout(tick, frameDelay);
+      finishId = window.setTimeout(() => {
+        if (timerId !== null) {
+          window.clearTimeout(timerId);
+        }
+        paint(1);
+        timerId = null;
+        finishId = null;
+      }, duration);
+    }
+
+    function setMenuRadius(progress) {
+      const maxRadius = Math.ceil(Math.hypot(window.innerWidth, window.innerHeight) + 120);
+      root.style.setProperty("--menu-radius", `${maxRadius * progress}px`);
+    }
+
+    function clearMenuTimers() {
+      if (menuFlowId !== null) {
+        window.clearTimeout(menuFlowId);
+      }
+
+      menuFlowId = null;
+    }
+
+    function animateMenu(open) {
+      clearMenuTimers();
+
+      const startedAt = Date.now();
+      const from = open ? 0 : 1;
+      const to = open ? 1 : 0;
+
+      if (open) {
+        body.classList.add("menu-open");
+      }
+
+      function step() {
+        const elapsed = Date.now() - startedAt;
+        const progress = Math.min(elapsed / menuFlowDuration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const radius = from + ((to - from) * eased);
+
+        setMenuRadius(radius);
+
+        if (progress < 1) {
+          menuFlowId = window.setTimeout(step, frameDelay);
+        } else {
+          menuFlowId = null;
+          if (open) {
+            setMenuRadius(1);
+          } else {
+            body.classList.remove("menu-open");
+          }
+        }
+      }
+
+      setMenuRadius(from);
+      menuFlowId = window.setTimeout(step, frameDelay);
+    }
+
+    menuButton.addEventListener("click", () => {
+      const menuIsOpen = !body.classList.contains("menu-open");
+
+      animateMenu(menuIsOpen);
+      menuButton.setAttribute("aria-label", menuIsOpen ? "Close menu" : "Open menu");
+      menuButton.setAttribute("aria-expanded", String(menuIsOpen));
+    });
+
+    start();
+  </script>
+</body>
+</html>

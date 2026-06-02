@@ -9,6 +9,7 @@
       color-scheme: light dark;
       --edge: clamp(16px, 4vw, 32px);
       --button-size: clamp(44px, 9vw, 60px);
+      --scroll-cta-size: clamp(136px, 34vw, 208px);
       --fill: 0%;
       --menu-radius: 0px;
       --menu-origin-x: calc(100% - max(var(--edge), env(safe-area-inset-right)) - (var(--button-size) / 2));
@@ -27,11 +28,21 @@
       margin: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       min-height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: hidden;
       background: #fff;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body.is-loaded {
+      overflow-y: auto;
+      background: #000;
     }
 
     .page {
@@ -186,6 +197,86 @@
       text-decoration: none;
     }
 
+    .scroll-cta {
+      position: absolute;
+      left: max(var(--edge), env(safe-area-inset-left));
+      bottom: calc(max(var(--edge), env(safe-area-inset-bottom)) + clamp(72px, 11vw, 104px));
+      z-index: 1;
+      display: grid;
+      width: var(--scroll-cta-size);
+      aspect-ratio: 1;
+      place-items: center;
+      border: 0;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      opacity: 0;
+      padding: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+
+    .is-loaded .scroll-cta {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    body.menu-open .scroll-cta {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .scroll-cta-ring {
+      position: absolute;
+      inset: 0;
+      overflow: visible;
+      pointer-events: none;
+      animation: rotateScrollText 16s linear infinite;
+      transform-origin: center;
+    }
+
+    .scroll-cta-ring text {
+      fill: #8497a3;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-rendering: geometricPrecision;
+    }
+
+    .scroll-cta-disc {
+      position: absolute;
+      inset: 26%;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #143d2d;
+      box-shadow: 0 clamp(9px, 2vw, 16px) 0 #082116, 0 clamp(18px, 4vw, 34px) clamp(24px, 6vw, 48px) rgba(0, 0, 0, 0.38);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .scroll-cta:hover .scroll-cta-disc,
+    .scroll-cta:focus-visible .scroll-cta-disc {
+      transform: translateY(-3px);
+      box-shadow: 0 clamp(12px, 2.4vw, 19px) 0 #082116, 0 clamp(22px, 5vw, 40px) clamp(28px, 7vw, 56px) rgba(0, 0, 0, 0.42);
+    }
+
+    .scroll-cta:focus-visible {
+      outline: 2px solid #8497a3;
+      outline-offset: 6px;
+      border-radius: 50%;
+    }
+
+    .scroll-cta-arrow {
+      width: 48%;
+      height: 48%;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 8;
+    }
+
     .footer-banner {
       position: fixed;
       right: 0;
@@ -237,9 +328,63 @@
       white-space: nowrap;
     }
 
+    .next-section {
+      display: grid;
+      min-height: 100dvh;
+      place-items: center;
+      background: #fff;
+      color: #000;
+      padding: clamp(72px, 12vw, 128px) max(var(--edge), env(safe-area-inset-left)) calc(clamp(96px, 14vw, 148px) + env(safe-area-inset-bottom));
+      scroll-margin-top: 0;
+    }
+
+    .next-section-inner {
+      width: min(920px, 100%);
+    }
+
+    .next-section h1 {
+      margin: 0 0 clamp(16px, 3vw, 24px);
+      font-size: clamp(52px, 11vw, 118px);
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: 0.88;
+    }
+
+    .next-section p {
+      max-width: 680px;
+      margin: 0;
+      font-size: clamp(22px, 4vw, 42px);
+      font-weight: 800;
+      letter-spacing: 0;
+      line-height: 1.05;
+    }
+
+    .next-section a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 54px;
+      margin-top: clamp(28px, 5vw, 44px);
+      border-radius: 999px;
+      background: #143d2d;
+      color: #fff;
+      font-size: clamp(15px, 2.4vw, 20px);
+      font-weight: 800;
+      letter-spacing: 0;
+      line-height: 1;
+      padding: 0 26px;
+      text-decoration: none;
+    }
+
     @keyframes marquee {
       to {
         transform: translateX(-50%);
+      }
+    }
+
+    @keyframes rotateScrollText {
+      to {
+        transform: rotate(1turn);
       }
     }
   </style>
@@ -261,6 +406,15 @@
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
+    <button class="scroll-cta" type="button" aria-label="Scroll down to next section">
+      <svg class="scroll-cta-ring" viewBox="0 0 200 200" aria-hidden="true"></svg>
+      <span class="scroll-cta-disc" aria-hidden="true">
+        <svg class="scroll-cta-arrow" viewBox="0 0 64 64" fill="none">
+          <path d="M32 10v40"></path>
+          <path d="M16 34l16 16 16-16"></path>
+        </svg>
+      </span>
+    </button>
     <footer class="footer-banner" aria-label="YKI test registration notice">
       <a class="banner-track" href="https://yki.opintopolku.fi/yki/ilmoittautuminen" aria-label="Go to YKI test registration">
         <div class="banner-text"><strong>Registration for the next YKI test is currently open, and the exam will be held on 29 August 2026.</strong></div>
@@ -268,6 +422,13 @@
       </a>
     </footer>
   </main>
+  <section class="next-section" id="next-section" tabindex="-1" aria-label="YKI registration details">
+    <div class="next-section-inner">
+      <h1>YKI Exam</h1>
+      <p>Registration is open, and the next exam will be held on 29 August 2026.</p>
+      <a href="https://yki.opintopolku.fi/yki/ilmoittautuminen">Registration page</a>
+    </div>
+  </section>
 
   <script>
     const duration = 2000;
@@ -277,6 +438,9 @@
     const root = document.documentElement;
     const percentValues = document.querySelectorAll(".percent-value");
     const menuButton = document.querySelector(".menu-button");
+    const scrollCta = document.querySelector(".scroll-cta");
+    const scrollCtaRing = document.querySelector(".scroll-cta-ring");
+    const nextSection = document.querySelector("#next-section");
     const footerBanner = document.querySelector(".footer-banner");
     const startTime = Date.now();
     let timerId = null;
@@ -317,6 +481,34 @@
         timerId = null;
         finishId = null;
       }, duration);
+    }
+
+    function buildScrollCtaRing() {
+      const label = "SCROLL DOWN \u2022 SCROLL DOWN \u2022";
+      const characters = Array.from(label);
+      const namespace = "http://www.w3.org/2000/svg";
+      const center = 100;
+      const radius = 80;
+      const startAngle = -157;
+      const angleStep = 360 / characters.length;
+
+      scrollCtaRing.innerHTML = "";
+
+      characters.forEach((character, index) => {
+        const angle = startAngle + (angleStep * index);
+        const radians = angle * (Math.PI / 180);
+        const x = center + (radius * Math.cos(radians));
+        const y = center + (radius * Math.sin(radians));
+        const letter = document.createElementNS(namespace, "text");
+
+        letter.setAttribute("x", x.toFixed(3));
+        letter.setAttribute("y", y.toFixed(3));
+        letter.setAttribute("text-anchor", "middle");
+        letter.setAttribute("dominant-baseline", "central");
+        letter.setAttribute("transform", `rotate(${(angle + 90).toFixed(3)} ${x.toFixed(3)} ${y.toFixed(3)})`);
+        letter.textContent = character === " " ? "\u00a0" : character;
+        scrollCtaRing.appendChild(letter);
+      });
     }
 
     function setMenuRadius(progress) {
@@ -375,6 +567,10 @@
       menuButton.setAttribute("aria-expanded", String(menuIsOpen));
     });
 
+    scrollCta.addEventListener("click", () => {
+      nextSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
     footerBanner.addEventListener("pointerenter", () => {
       footerBanner.classList.add("is-paused");
     });
@@ -391,6 +587,7 @@
       footerBanner.classList.remove("is-paused");
     });
 
+    buildScrollCtaRing();
     start();
   </script>
 </body>

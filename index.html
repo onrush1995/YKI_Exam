@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loaded Landing Page</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --edge: clamp(16px, 4vw, 32px);
+      --button-size: clamp(44px, 9vw, 60px);
+      --scroll-cta-size: clamp(136px, 34vw, 208px);
+      --fill: 0%;
+      --menu-radius: 0px;
+      --menu-origin-x: calc(100% - max(var(--edge), env(safe-area-inset-right)) - (var(--button-size) / 2));
+      --menu-origin-y: calc(max(var(--edge), env(safe-area-inset-top)) + (var(--button-size) / 2));
+      --scale: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      background: #fff;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body.is-loaded {
+      overflow-y: auto;
+      background: #000;
+    }
+
+    .page {
+      position: relative;
+      display: grid;
+      height: 100dvh;
+      min-height: 100vh;
+      place-items: center;
+      isolation: isolate;
+    }
+
+    .page::before {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: #000;
+      content: "";
+      transform: scaleY(var(--scale));
+      transform-origin: bottom;
+      will-change: transform;
+    }
+
+    .percent {
+      position: absolute;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      width: 4.2ch;
+      font-size: clamp(64px, 16vw, 150px);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0;
+      line-height: 0.86;
+      opacity: 1;
+      transition: opacity 180ms ease;
+    }
+
+    .is-loaded .percent {
+      opacity: 0;
+    }
+
+    .percent-black {
+      color: #000;
+    }
+
+    .percent-white {
+      color: #fff;
+      clip-path: inset(calc(100% - var(--fill)) 0 0 0);
+    }
+
+    .percent span:last-child {
+      margin-left: 0.04em;
+      font-size: 0.28em;
+      font-weight: 700;
+    }
+
+    .menu-button {
+      position: fixed;
+      top: max(var(--edge), env(safe-area-inset-top));
+      right: max(var(--edge), env(safe-area-inset-right));
+      display: grid;
+      z-index: 3;
+      width: var(--button-size);
+      aspect-ratio: 1;
+      place-items: center;
+      border: 0;
+      background: transparent;
+      color: #fff;
+      opacity: 0;
+      transition: opacity 180ms ease;
+      cursor: pointer;
+      pointer-events: none;
+    }
+
+    .menu-button span,
+    .menu-button::before,
+    .menu-button::after {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      display: block;
+      width: 42%;
+      height: 3px;
+      border-radius: 999px;
+      background: currentColor;
+      content: "";
+      transform: translate(-50%, -50%);
+    }
+
+    .menu-button::before {
+      transform: translate(-50%, calc(-50% - clamp(7px, 1.4vw, 9px)));
+    }
+
+    .menu-button::after {
+      transform: translate(-50%, calc(-50% + clamp(7px, 1.4vw, 9px)));
+    }
+
+    .is-loaded .menu-button {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    body.menu-open .menu-button {
+      color: #000;
+    }
+
+    .menu-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      background: #fff;
+      color: #000;
+      clip-path: circle(var(--menu-radius) at var(--menu-origin-x) var(--menu-origin-y));
+      opacity: 1;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    body.menu-open .menu-panel {
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .menu-list {
+      position: fixed;
+      top: calc(max(var(--edge), env(safe-area-inset-top)) + var(--button-size) + clamp(8px, 2vw, 18px));
+      right: max(var(--edge), env(safe-area-inset-right));
+      display: grid;
+      gap: clamp(8px, 2vw, 14px);
+      max-width: min(70vw, 360px);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      opacity: 0;
+      text-align: right;
+      transform: translateX(18px);
+      transition: opacity 220ms ease 180ms, transform 220ms ease 180ms;
+    }
+
+    body.menu-open .menu-list {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .menu-list a {
+      color: inherit;
+      display: block;
+      font-size: clamp(28px, 6vw, 56px);
+      font-weight: 800;
+      letter-spacing: 0;
+      line-height: 1;
+      text-decoration: none;
+    }
+
+    .scroll-cta {
+      position: absolute;
+      left: max(var(--edge), env(safe-area-inset-left));
+      bottom: calc(max(var(--edge), env(safe-area-inset-bottom)) + clamp(72px, 11vw, 104px));
+      z-index: 1;
+      display: grid;
+      width: var(--scroll-cta-size);
+      aspect-ratio: 1;
+      place-items: center;
+      border: 0;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      opacity: 0;
+      padding: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+
+    .is-loaded .scroll-cta {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    body.menu-open .scroll-cta {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .scroll-cta-ring {
+      position: absolute;
+      inset: 0;
+      overflow: visible;
+      pointer-events: none;
+      animation: rotateScrollText 16s linear infinite;
+      transform-origin: center;
+    }
+
+    .scroll-cta-ring text {
+      fill: #8497a3;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-rendering: geometricPrecision;
+    }
+
+    .scroll-cta-disc {
+      position: absolute;
+      inset: 26%;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #143d2d;
+      box-shadow: 0 clamp(9px, 2vw, 16px) 0 #082116, 0 clamp(18px, 4vw, 34px) clamp(24px, 6vw, 48px) rgba(0, 0, 0, 0.38);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .scroll-cta:hover .scroll-cta-disc,
+    .scroll-cta:focus-visible .scroll-cta-disc {
+      transform: translateY(-3px);
+      box-shadow: 0 clamp(12px, 2.4vw, 19px) 0 #082116, 0 clamp(22px, 5vw, 40px) clamp(28px, 7vw, 56px) rgba(0, 0, 0, 0.42);
+    }
+
+    .scroll-cta:focus-visible {
+      outline: 2px solid #8497a3;
+      outline-offset: 6px;
+      border-radius: 50%;
+    }
+
+    .scroll-cta-arrow {
+      width: 48%;
+      height: 48%;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 8;
+    }
+
+    .footer-banner {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 4;
+      overflow: hidden;
+      border-top: 1px solid currentColor;
+      background: #000;
+      color: #fff;
+      opacity: 0;
+      padding: clamp(10px, 2.4vw, 18px) 0;
+      pointer-events: none;
+      transition: background-color 180ms ease, color 180ms ease, opacity 180ms ease;
+    }
+
+    .is-loaded .footer-banner {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    body.menu-open .footer-banner {
+      background: #fff;
+      color: #000;
+    }
+
+    .banner-track {
+      display: flex;
+      width: max-content;
+      animation: marquee 18s linear infinite;
+      color: inherit;
+      text-decoration: none;
+      will-change: transform;
+    }
+
+    .footer-banner:hover .banner-track,
+    .footer-banner:focus-within .banner-track,
+    .footer-banner.is-paused .banner-track {
+      animation-play-state: paused;
+    }
+
+    .banner-text {
+      flex: 0 0 auto;
+      padding-right: clamp(36px, 8vw, 96px);
+      font-size: clamp(14px, 2.6vw, 22px);
+      font-weight: 700;
+      letter-spacing: 0;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .next-section {
+      display: grid;
+      min-height: 100dvh;
+      place-items: center;
+      background: #fff;
+      color: #000;
+      padding: clamp(72px, 12vw, 128px) max(var(--edge), env(safe-area-inset-left)) calc(clamp(96px, 14vw, 148px) + env(safe-area-inset-bottom));
+      scroll-margin-top: 0;
+    }
+
+    .next-section-inner {
+      width: min(920px, 100%);
+    }
+
+    .next-section h1 {
+      margin: 0 0 clamp(16px, 3vw, 24px);
+      font-size: clamp(52px, 11vw, 118px);
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: 0.88;
+    }
+
+    .next-section p {
+      max-width: 680px;
+      margin: 0;
+      font-size: clamp(22px, 4vw, 42px);
+      font-weight: 800;
+      letter-spacing: 0;
+      line-height: 1.05;
+    }
+
+    .next-section a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 54px;
+      margin-top: clamp(28px, 5vw, 44px);
+      border-radius: 999px;
+      background: #143d2d;
+      color: #fff;
+      font-size: clamp(15px, 2.4vw, 20px);
+      font-weight: 800;
+      letter-spacing: 0;
+      line-height: 1;
+      padding: 0 26px;
+      text-decoration: none;
+    }
+
+    @keyframes marquee {
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    @keyframes rotateScrollText {
+      to {
+        transform: rotate(1turn);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page" aria-live="polite">
+    <div class="percent percent-black" aria-label="Loading progress">
+      <span class="percent-value">0</span><span>%</span>
+    </div>
+    <div class="percent percent-white" aria-hidden="true">
+      <span class="percent-value">0</span><span>%</span>
+    </div>
+    <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="menu-panel" aria-label="Main menu">
+      <ul class="menu-list">
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <button class="scroll-cta" type="button" aria-label="Scroll down to next section">
+      <svg class="scroll-cta-ring" viewBox="0 0 200 200" aria-hidden="true"></svg>
+      <span class="scroll-cta-disc" aria-hidden="true">
+        <svg class="scroll-cta-arrow" viewBox="0 0 64 64" fill="none">
+          <path d="M32 10v40"></path>
+          <path d="M16 34l16 16 16-16"></path>
+        </svg>
+      </span>
+    </button>
+    <footer class="footer-banner" aria-label="YKI test registration notice">
+      <a class="banner-track" href="https://yki.opintopolku.fi/yki/ilmoittautuminen" aria-label="Go to YKI test registration">
+        <div class="banner-text"><strong>Registration for the next YKI test is currently open, and the exam will be held on 29 August 2026.</strong></div>
+        <div class="banner-text" aria-hidden="true"><strong>Registration for the next YKI test is currently open, and the exam will be held on 29 August 2026.</strong></div>
+      </a>
+    </footer>
+  </main>
+  <section class="next-section" id="next-section" tabindex="-1" aria-label="YKI registration details">
+    <div class="next-section-inner">
+      <h1>YKI Exam</h1>
+      <p>Registration is open, and the next exam will be held on 29 August 2026.</p>
+      <a href="https://yki.opintopolku.fi/yki/ilmoittautuminen">Registration page</a>
+    </div>
+  </section>
+
+  <script>
+    const duration = 2000;
+    const frameDelay = 10;
+    const menuFlowDuration = 650;
+    const body = document.body;
+    const root = document.documentElement;
+    const percentValues = document.querySelectorAll(".percent-value");
+    const menuButton = document.querySelector(".menu-button");
+    const scrollCta = document.querySelector(".scroll-cta");
+    const scrollCtaRing = document.querySelector(".scroll-cta-ring");
+    const nextSection = document.querySelector("#next-section");
+    const footerBanner = document.querySelector(".footer-banner");
+    const startTime = Date.now();
+    let timerId = null;
+    let finishId = null;
+    let menuFlowId = null;
+
+    function paint(progress) {
+      const percentage = Math.min(100, Math.round(progress * 100));
+      const fill = `${(progress * 100).toFixed(3)}%`;
+      root.style.setProperty("--fill", fill);
+      root.style.setProperty("--scale", progress.toFixed(4));
+      body.classList.toggle("is-loaded", progress === 1);
+      percentValues.forEach((value) => {
+        value.textContent = percentage;
+      });
+    }
+
+    function tick() {
+      const progress = Math.min((Date.now() - startTime) / duration, 1);
+      paint(progress);
+
+      if (progress < 1) {
+        timerId = window.setTimeout(tick, frameDelay);
+      } else {
+        timerId = null;
+        finishId = null;
+      }
+    }
+
+    function start() {
+      paint(0);
+      timerId = window.setTimeout(tick, frameDelay);
+      finishId = window.setTimeout(() => {
+        if (timerId !== null) {
+          window.clearTimeout(timerId);
+        }
+        paint(1);
+        timerId = null;
+        finishId = null;
+      }, duration);
+    }
+
+    function buildScrollCtaRing() {
+      const label = "SCROLL DOWN \u2022 SCROLL DOWN \u2022";
+      const characters = Array.from(label);
+      const namespace = "http://www.w3.org/2000/svg";
+      const center = 100;
+      const radius = 80;
+      const startAngle = -157;
+      const angleStep = 360 / characters.length;
+
+      scrollCtaRing.innerHTML = "";
+
+      characters.forEach((character, index) => {
+        const angle = startAngle + (angleStep * index);
+        const radians = angle * (Math.PI / 180);
+        const x = center + (radius * Math.cos(radians));
+        const y = center + (radius * Math.sin(radians));
+        const letter = document.createElementNS(namespace, "text");
+
+        letter.setAttribute("x", x.toFixed(3));
+        letter.setAttribute("y", y.toFixed(3));
+        letter.setAttribute("text-anchor", "middle");
+        letter.setAttribute("dominant-baseline", "central");
+        letter.setAttribute("transform", `rotate(${(angle + 90).toFixed(3)} ${x.toFixed(3)} ${y.toFixed(3)})`);
+        letter.textContent = character === " " ? "\u00a0" : character;
+        scrollCtaRing.appendChild(letter);
+      });
+    }
+
+    function setMenuRadius(progress) {
+      const maxRadius = Math.ceil(Math.hypot(window.innerWidth, window.innerHeight) + 120);
+      root.style.setProperty("--menu-radius", `${maxRadius * progress}px`);
+    }
+
+    function clearMenuTimers() {
+      if (menuFlowId !== null) {
+        window.clearTimeout(menuFlowId);
+      }
+
+      menuFlowId = null;
+    }
+
+    function animateMenu(open) {
+      clearMenuTimers();
+
+      const startedAt = Date.now();
+      const from = open ? 0 : 1;
+      const to = open ? 1 : 0;
+
+      if (open) {
+        body.classList.add("menu-open");
+      }
+
+      function step() {
+        const elapsed = Date.now() - startedAt;
+        const progress = Math.min(elapsed / menuFlowDuration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const radius = from + ((to - from) * eased);
+
+        setMenuRadius(radius);
+
+        if (progress < 1) {
+          menuFlowId = window.setTimeout(step, frameDelay);
+        } else {
+          menuFlowId = null;
+          if (open) {
+            setMenuRadius(1);
+          } else {
+            body.classList.remove("menu-open");
+          }
+        }
+      }
+
+      setMenuRadius(from);
+      menuFlowId = window.setTimeout(step, frameDelay);
+    }
+
+    menuButton.addEventListener("click", () => {
+      const menuIsOpen = !body.classList.contains("menu-open");
+
+      animateMenu(menuIsOpen);
+      menuButton.setAttribute("aria-label", menuIsOpen ? "Close menu" : "Open menu");
+      menuButton.setAttribute("aria-expanded", String(menuIsOpen));
+    });
+
+    scrollCta.addEventListener("click", () => {
+      nextSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    footerBanner.addEventListener("pointerenter", () => {
+      footerBanner.classList.add("is-paused");
+    });
+
+    footerBanner.addEventListener("pointerleave", () => {
+      footerBanner.classList.remove("is-paused");
+    });
+
+    footerBanner.addEventListener("focusin", () => {
+      footerBanner.classList.add("is-paused");
+    });
+
+    footerBanner.addEventListener("focusout", () => {
+      footerBanner.classList.remove("is-paused");
+    });
+
+    buildScrollCtaRing();
+    start();
+  </script>
+</body>
+</html>

@@ -171,8 +171,8 @@
       top: calc(max(var(--edge), env(safe-area-inset-top)) + var(--button-size) + clamp(8px, 2vw, 18px));
       right: max(var(--edge), env(safe-area-inset-right));
       display: grid;
-      gap: clamp(7px, 1.6vw, 12px);
-      max-width: min(82vw, 620px);
+      gap: clamp(14px, 3vw, 24px);
+      max-width: min(84vw, 620px);
       margin: 0;
       padding: 0;
       list-style: none;
@@ -190,10 +190,10 @@
     .menu-list a {
       color: inherit;
       display: block;
-      font-size: clamp(22px, 5vw, 48px);
+      font-size: clamp(20px, 4.5vw, 42px);
       font-weight: 800;
       letter-spacing: 0;
-      line-height: 1.02;
+      line-height: 1.12;
       text-decoration: none;
     }
 
@@ -406,7 +406,7 @@
         <li><a href="#finnish-for-beginners">Finnish for beginners</a></li>
         <li><a href="#podcast">Podcast</a></li>
         <li><a href="blog.html">Blog</a></li>
-        <li><a href="#about">About</a></li>
+        <li><a href="about.html">About</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
@@ -447,6 +447,7 @@
     const scrollCtaRing = document.querySelector(".scroll-cta-ring");
     const nextSection = document.querySelector("#next-section");
     const footerBanner = document.querySelector(".footer-banner");
+    const skipLoader = new URLSearchParams(window.location.search).get("skipLoader") === "1";
     const startTime = Date.now();
     let timerId = null;
     let finishId = null;
@@ -615,7 +616,12 @@
     });
 
     buildScrollCtaRing();
-    start();
+    if (skipLoader) {
+      paint(1);
+      window.history.replaceState(null, "", "index.html#home");
+    } else {
+      start();
+    }
   </script>
 </body>
 </html>

@@ -17,42 +17,212 @@
     }
 
     body {
-      display: grid;
       min-height: 100vh;
-      place-items: center;
-      background: #000;
-      color: #fff;
+      background: #f4f7f8;
+      color: #08110d;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      padding: clamp(24px, 6vw, 64px);
-    }
-
-    main {
-      display: grid;
-      gap: clamp(22px, 5vw, 40px);
-      justify-items: center;
-      text-align: center;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(56px, 15vw, 172px);
-      font-weight: 900;
-      letter-spacing: 0;
-      line-height: 0.9;
     }
 
     a {
       color: inherit;
-      font-size: clamp(16px, 3vw, 22px);
-      font-weight: 800;
       text-decoration: none;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: clamp(18px, 4vw, 34px) clamp(18px, 5vw, 64px);
+    }
+
+    .page-header a,
+    .page-header span {
+      font-size: clamp(14px, 2.4vw, 18px);
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    main {
+      display: grid;
+      gap: clamp(42px, 8vw, 84px);
+      padding: clamp(24px, 5vw, 72px) clamp(18px, 5vw, 64px) clamp(54px, 8vw, 96px);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.92fr);
+      gap: clamp(34px, 7vw, 92px);
+      align-items: center;
+      min-height: min(680px, calc(100vh - 140px));
+    }
+
+    .eyebrow {
+      margin: 0 0 clamp(16px, 3vw, 28px);
+      color: #667d8c;
+      font-size: clamp(14px, 2vw, 18px);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 850px;
+      margin: 0;
+      font-size: clamp(58px, 13vw, 172px);
+      font-weight: 950;
+      letter-spacing: 0;
+      line-height: 0.86;
+    }
+
+    .intro {
+      max-width: 680px;
+      margin: clamp(22px, 4vw, 34px) 0 0;
+      color: #263a33;
+      font-size: clamp(20px, 3.2vw, 32px);
+      font-weight: 750;
+      letter-spacing: 0;
+      line-height: 1.16;
+    }
+
+    .word-compass {
+      display: grid;
+      min-height: clamp(300px, 48vw, 480px);
+      place-items: center;
+    }
+
+    .word-compass svg {
+      width: min(100%, 430px);
+      height: auto;
+      overflow: visible;
+    }
+
+    .compass-ring {
+      fill: none;
+      stroke: #718899;
+      stroke-width: 1.5;
+    }
+
+    .compass-path {
+      fill: none;
+    }
+
+    .compass-text {
+      fill: #718899;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 3px;
+    }
+
+    .compass-line {
+      fill: none;
+      stroke: #143d2d;
+      stroke-linecap: round;
+      stroke-width: 9;
+    }
+
+    .compass-dot {
+      fill: #143d2d;
+    }
+
+    .compass-center {
+      fill: #08110d;
+    }
+
+    .posts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(14px, 2.5vw, 24px);
+    }
+
+    .post-card {
+      display: grid;
+      gap: 18px;
+      min-height: 260px;
+      border: 1px solid rgba(8, 17, 13, 0.16);
+      border-radius: 8px;
+      background: #fff;
+      padding: clamp(20px, 3vw, 30px);
+    }
+
+    .post-card span {
+      color: #667d8c;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .post-card h2 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+
+    .post-card p {
+      margin: 0;
+      color: #33443d;
+      font-size: clamp(16px, 2vw, 19px);
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 820px) {
+      .hero,
+      .posts {
+        grid-template-columns: 1fr;
+      }
+
+      .word-compass {
+        min-height: 280px;
+      }
     }
   </style>
 </head>
 <body>
-  <main>
-    <h1>Kiitos, Suomi</h1>
+  <header class="page-header">
     <a href="index.html?skipLoader=1#home">Home</a>
+    <span>Blog</span>
+  </header>
+  <main>
+    <section class="hero" aria-labelledby="blog-title">
+      <div>
+        <p class="eyebrow">Finnish learning journal</p>
+        <h1 id="blog-title">Kiitos, Suomi</h1>
+        <p class="intro">A clean space for short notes on Finnish, YKI practice, learner habits, and the small language wins that keep momentum alive.</p>
+      </div>
+      <div class="word-compass" aria-hidden="true">
+        <svg viewBox="0 0 320 320" role="img">
+          <defs>
+            <path id="compassTextPath" class="compass-path" d="M160 160 m -120 0 a 120 120 0 1 1 240 0 a 120 120 0 1 1 -240 0"></path>
+          </defs>
+          <circle class="compass-ring" cx="160" cy="160" r="120"></circle>
+          <text class="compass-text">
+            <textPath href="#compassTextPath" startOffset="0">KIITOS / SUOMI / YKI / PUHE / KUUNTELE / BLOG /</textPath>
+          </text>
+          <path class="compass-line" d="M105 212 C128 148 159 122 222 96"></path>
+          <circle class="compass-dot" cx="105" cy="212" r="14"></circle>
+          <circle class="compass-dot" cx="222" cy="96" r="14"></circle>
+          <circle class="compass-center" cx="160" cy="160" r="8"></circle>
+        </svg>
+      </div>
+    </section>
+    <section class="posts" aria-label="Featured blog posts">
+      <article class="post-card">
+        <span>01</span>
+        <h2>Small Finnish every day</h2>
+        <p>Short, repeatable routines for keeping Finnish close even when the calendar is crowded.</p>
+      </article>
+      <article class="post-card">
+        <span>02</span>
+        <h2>Speaking with less pressure</h2>
+        <p>Simple YKI-style prompts that make spoken Finnish feel more natural and less staged.</p>
+      </article>
+      <article class="post-card">
+        <span>03</span>
+        <h2>Listening for patterns</h2>
+        <p>A practical way to notice endings, rhythm, and familiar phrases while listening.</p>
+      </article>
+    </section>
   </main>
 </body>
 </html>

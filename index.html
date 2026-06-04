@@ -29,19 +29,19 @@
     }
 
     html {
+      overflow-y: scroll;
       scroll-behavior: smooth;
     }
 
     body {
       min-height: 100vh;
-      overflow-x: hidden;
-      overflow-y: hidden;
+      overflow-x: clip;
+      overflow-y: visible;
       background: #fff;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     body.is-loaded {
-      overflow-y: auto;
       background: #000;
     }
 
@@ -80,8 +80,10 @@
       transition: opacity 180ms ease;
     }
 
-    .is-loaded .percent {
+    body.is-loaded .percent {
       opacity: 0;
+      pointer-events: none;
+      transition: none;
     }
 
     .percent-black {
@@ -140,9 +142,10 @@
       transform: translate(-50%, calc(-50% + clamp(7px, 1.4vw, 9px)));
     }
 
-    .is-loaded .menu-button {
+    body.is-loaded .menu-button {
       opacity: 1;
       pointer-events: auto;
+      transition: none;
     }
 
     body.menu-open .menu-button {
@@ -217,10 +220,11 @@
       transition: opacity 220ms ease, transform 220ms ease;
     }
 
-    .is-loaded .scroll-cta {
+    body.is-loaded .scroll-cta {
       opacity: 1;
       pointer-events: auto;
       transform: translateY(0);
+      transition: transform 180ms ease;
     }
 
     body.menu-open .scroll-cta {
@@ -293,9 +297,10 @@
       transition: background-color 180ms ease, color 180ms ease, opacity 180ms ease;
     }
 
-    .is-loaded .footer-banner {
+    body.is-loaded .footer-banner {
       opacity: 1;
       pointer-events: auto;
+      transition: background-color 180ms ease, color 180ms ease;
     }
 
     body.menu-open .footer-banner {
@@ -326,6 +331,548 @@
       letter-spacing: 0;
       line-height: 1.2;
       white-space: nowrap;
+    }
+
+    .learning-section {
+      background: #f6f7f1;
+      color: #161313;
+      padding: clamp(76px, 12vw, 132px) max(var(--edge), env(safe-area-inset-left)) calc(clamp(96px, 14vw, 148px) + env(safe-area-inset-bottom));
+      scroll-margin-top: 0;
+    }
+
+    body.learning-view {
+      background: #f6f7f1;
+    }
+
+    body.prep-view {
+      background: #101312;
+    }
+
+    body.learning-view .learning-section,
+    body.prep-view .prep-section {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      overflow-y: auto;
+    }
+
+    body.learning-view .page,
+    body.prep-view .page {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      min-height: 100dvh;
+      pointer-events: none;
+    }
+
+    body.learning-view .page::before,
+    body.prep-view .page::before {
+      opacity: 0;
+    }
+
+    body.learning-view .menu-button {
+      color: #161313;
+      pointer-events: auto;
+    }
+
+    body.prep-view .menu-button {
+      color: #fff;
+      pointer-events: auto;
+    }
+
+    body.prep-view.menu-open .menu-button {
+      color: #000;
+    }
+
+    body.learning-view .menu-panel,
+    body.learning-view .footer-banner,
+    body.prep-view .menu-panel,
+    body.prep-view .footer-banner {
+      pointer-events: auto;
+    }
+
+    body.learning-view .scroll-cta,
+    body.prep-view .scroll-cta {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .learning-shell {
+      display: grid;
+      gap: clamp(34px, 6vw, 72px);
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .learning-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 440px);
+      gap: clamp(28px, 5vw, 64px);
+      align-items: stretch;
+    }
+
+    .learning-eyebrow {
+      margin: 0 0 18px;
+      color: #5f6f7c;
+      font-size: clamp(13px, 2vw, 16px);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .learning-hero h1 {
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(54px, 10vw, 126px);
+      font-weight: 950;
+      letter-spacing: 0;
+      line-height: 0.86;
+    }
+
+    .learning-hero p {
+      max-width: 690px;
+      margin: clamp(20px, 4vw, 34px) 0 0;
+      color: #34413b;
+      font-size: clamp(19px, 3vw, 28px);
+      font-weight: 720;
+      line-height: 1.18;
+    }
+
+    .learning-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: clamp(24px, 4vw, 38px);
+    }
+
+    .learning-actions a {
+      display: inline-flex;
+      min-height: 54px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      padding: 0 24px;
+      font-size: 15px;
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    .learning-actions a:first-child {
+      background: #161313;
+      color: #fff;
+    }
+
+    .course-preview {
+      display: grid;
+      overflow: hidden;
+      border: 1px solid rgba(22, 19, 19, 0.16);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 14px 14px 0 rgba(20, 61, 45, 0.16);
+    }
+
+    .preview-screen {
+      position: relative;
+      display: grid;
+      min-height: 250px;
+      place-items: center;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.14), transparent 40%),
+        #143d2d;
+      color: #fff;
+    }
+
+    .preview-screen svg {
+      width: min(76%, 300px);
+      height: auto;
+    }
+
+    .play-button {
+      position: absolute;
+      display: grid;
+      width: clamp(58px, 9vw, 78px);
+      aspect-ratio: 1;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.22);
+      color: #fff;
+      font-size: 30px;
+      font-weight: 900;
+    }
+
+    .preview-meta {
+      display: grid;
+      gap: 16px;
+      padding: clamp(20px, 3vw, 28px);
+    }
+
+    .preview-meta h2 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 38px);
+      font-weight: 930;
+      line-height: 0.98;
+    }
+
+    .course-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .course-stats span {
+      display: grid;
+      gap: 4px;
+      border-top: 1px solid rgba(22, 19, 19, 0.16);
+      padding-top: 10px;
+      color: #59675f;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .course-stats strong {
+      color: #161313;
+      font-size: clamp(18px, 3vw, 26px);
+      font-weight: 950;
+    }
+
+    .course-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .course-tabs a {
+      display: inline-flex;
+      min-height: 40px;
+      align-items: center;
+      border: 1px solid rgba(22, 19, 19, 0.22);
+      border-radius: 999px;
+      padding: 0 16px;
+      background: #fff;
+      font-size: 14px;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .course-tabs .is-active {
+      background: #161313;
+      color: #fff;
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(16px, 2.5vw, 24px);
+    }
+
+    .course-card {
+      display: grid;
+      gap: 18px;
+      min-height: 310px;
+      border: 1px solid rgba(22, 19, 19, 0.16);
+      border-radius: 8px;
+      background: #fff;
+      padding: clamp(22px, 3vw, 30px);
+    }
+
+    .course-card small {
+      color: #5f6f7c;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .course-card h3 {
+      margin: 0;
+      font-size: clamp(25px, 3.3vw, 40px);
+      font-weight: 930;
+      line-height: 0.98;
+    }
+
+    .course-card p {
+      margin: 0;
+      color: #3d4b44;
+      font-size: clamp(15px, 2vw, 18px);
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .progress-track {
+      overflow: hidden;
+      height: 8px;
+      border-radius: 999px;
+      background: #e3e7dc;
+    }
+
+    .progress-fill {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: #143d2d;
+    }
+
+    .course-card footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: auto;
+      color: #59675f;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .learning-bottom {
+      display: grid;
+      grid-template-columns: minmax(0, 0.75fr) minmax(280px, 0.25fr);
+      gap: clamp(18px, 4vw, 38px);
+      align-items: start;
+    }
+
+    .curriculum {
+      display: grid;
+      border: 1px solid rgba(22, 19, 19, 0.16);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .lesson-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      padding: clamp(18px, 3vw, 24px);
+      border-bottom: 1px solid rgba(22, 19, 19, 0.12);
+    }
+
+    .lesson-row:last-child {
+      border-bottom: 0;
+    }
+
+    .lesson-number {
+      display: grid;
+      width: 44px;
+      aspect-ratio: 1;
+      place-items: center;
+      border-radius: 50%;
+      background: #f0f2ea;
+      font-weight: 950;
+    }
+
+    .lesson-row h3 {
+      margin: 0 0 4px;
+      font-size: clamp(19px, 2.5vw, 26px);
+      font-weight: 900;
+      line-height: 1.05;
+    }
+
+    .lesson-row p {
+      margin: 0;
+      color: #59675f;
+      font-size: 14px;
+      font-weight: 720;
+    }
+
+    .lesson-row button,
+    .mentor-card a {
+      min-height: 42px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 900;
+      padding: 0 16px;
+    }
+
+    .mentor-card {
+      display: grid;
+      gap: 18px;
+      border: 1px solid rgba(22, 19, 19, 0.16);
+      border-radius: 8px;
+      background: #161313;
+      color: #fff;
+      padding: clamp(22px, 3vw, 30px);
+    }
+
+    .mentor-card h3 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1;
+    }
+
+    .mentor-card p {
+      margin: 0;
+      color: #d8ded6;
+      font-size: 16px;
+      font-weight: 650;
+      line-height: 1.38;
+    }
+
+    .prep-section {
+      background: #101312;
+      color: #fff;
+      padding: clamp(76px, 12vw, 132px) max(var(--edge), env(safe-area-inset-left)) calc(clamp(96px, 14vw, 148px) + env(safe-area-inset-bottom));
+      scroll-margin-top: 0;
+    }
+
+    .prep-shell {
+      display: grid;
+      gap: clamp(34px, 6vw, 68px);
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .prep-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
+      gap: clamp(24px, 5vw, 54px);
+      align-items: end;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding-bottom: clamp(28px, 5vw, 46px);
+    }
+
+    .prep-eyebrow {
+      margin: 0 0 16px;
+      color: #9bb0b8;
+      font-size: clamp(13px, 2vw, 16px);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .prep-hero h1 {
+      max-width: 840px;
+      margin: 0;
+      font-size: clamp(56px, 11vw, 130px);
+      font-weight: 950;
+      letter-spacing: 0;
+      line-height: 0.86;
+    }
+
+    .prep-hero p {
+      max-width: 720px;
+      margin: clamp(20px, 4vw, 34px) 0 0;
+      color: #dbe3df;
+      font-size: clamp(19px, 3vw, 28px);
+      font-weight: 720;
+      line-height: 1.18;
+    }
+
+    .prep-badge {
+      display: grid;
+      gap: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      border-radius: 8px;
+      padding: clamp(20px, 3vw, 28px);
+    }
+
+    .prep-badge strong {
+      font-size: clamp(34px, 7vw, 64px);
+      line-height: 0.9;
+    }
+
+    .prep-badge span {
+      color: #9bb0b8;
+      font-size: 14px;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .prep-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: clamp(16px, 2.5vw, 24px);
+    }
+
+    .prep-card {
+      display: grid;
+      gap: 18px;
+      min-height: 360px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      background: #fff;
+      color: #161313;
+      padding: clamp(22px, 3vw, 30px);
+    }
+
+    .prep-card-number {
+      display: grid;
+      width: 48px;
+      aspect-ratio: 1;
+      place-items: center;
+      border-radius: 50%;
+      background: #143d2d;
+      color: #fff;
+      font-weight: 950;
+    }
+
+    .prep-card h2 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 940;
+      line-height: 0.94;
+    }
+
+    .prep-card p {
+      margin: 0;
+      color: #3d4b44;
+      font-size: clamp(15px, 2vw, 18px);
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .prep-card ul {
+      display: grid;
+      gap: 8px;
+      margin: auto 0 0;
+      padding: 0;
+      color: #59675f;
+      font-size: 14px;
+      font-weight: 800;
+      list-style: none;
+    }
+
+    .prep-card li::before {
+      margin-right: 8px;
+      color: #143d2d;
+      content: "/";
+      font-weight: 950;
+    }
+
+    @media (max-width: 900px) {
+      .learning-hero,
+      .course-grid,
+      .learning-bottom,
+      .prep-hero {
+        grid-template-columns: 1fr;
+      }
+
+      .prep-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .lesson-row {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      .lesson-row button {
+        grid-column: 2;
+        width: fit-content;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .prep-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .next-section {
@@ -404,6 +951,7 @@
       <ul class="menu-list">
         <li><a href="#home">Home</a></li>
         <li><a href="#finnish-for-beginners">Finnish for beginners</a></li>
+        <li><a href="#yki-preparation">YKI Preparation</a></li>
         <li><a href="#podcast">Podcast</a></li>
         <li><a href="blog.html">Blog</a></li>
         <li><a href="about.html">About</a></li>
@@ -426,6 +974,158 @@
       </a>
     </footer>
   </main>
+  <section class="learning-section" id="finnish-for-beginners" aria-label="Finnish for beginners learning platform">
+    <div class="learning-shell">
+      <div class="learning-hero">
+        <div>
+          <p class="learning-eyebrow">Finnish for beginners</p>
+          <h1>Start learning Finnish with guided courses.</h1>
+          <p>Build from greetings to simple YKI-style answers with short videos, practice prompts, listening tasks, and weekly progress tracking.</p>
+          <div class="learning-actions">
+            <a href="#beginner-curriculum">Start learning</a>
+            <a href="blog.html">Read learner blog</a>
+          </div>
+        </div>
+        <aside class="course-preview" aria-label="Featured beginner course">
+          <div class="preview-screen">
+            <svg viewBox="0 0 320 210" aria-hidden="true">
+              <rect x="24" y="26" width="272" height="158" rx="10" fill="none" stroke="currentColor" stroke-width="8"></rect>
+              <path d="M70 70h106M70 100h172M70 130h132" stroke="currentColor" stroke-width="10" stroke-linecap="round"></path>
+              <circle cx="248" cy="134" r="24" fill="currentColor"></circle>
+            </svg>
+            <span class="play-button" aria-hidden="true">+</span>
+          </div>
+          <div class="preview-meta">
+            <h2>Complete beginner path</h2>
+            <div class="course-stats">
+              <span><strong>24</strong> lessons</span>
+              <span><strong>5h</strong> video</span>
+              <span><strong>A1</strong> level</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+      <ul class="course-tabs" aria-label="Course categories">
+        <li><a class="is-active" href="#finnish-for-beginners">All courses</a></li>
+        <li><a href="#beginner-curriculum">Speaking</a></li>
+        <li><a href="#beginner-curriculum">Listening</a></li>
+        <li><a href="#beginner-curriculum">YKI basics</a></li>
+      </ul>
+      <div class="course-grid" aria-label="Beginner courses">
+        <article class="course-card">
+          <small>Beginner course</small>
+          <h3>Everyday Finnish foundations</h3>
+          <p>Learn greetings, numbers, simple questions, and the phrases needed for daily life in Finland.</p>
+          <div class="progress-track" aria-label="Course progress 35 percent"><span class="progress-fill" style="width: 35%;"></span></div>
+          <footer><span>8 modules</span><span>35% complete</span></footer>
+        </article>
+        <article class="course-card">
+          <small>Speaking practice</small>
+          <h3>Confidence for first conversations</h3>
+          <p>Practice short answers, pronunciation rhythm, and beginner-friendly speaking prompts.</p>
+          <div class="progress-track" aria-label="Course progress 12 percent"><span class="progress-fill" style="width: 12%;"></span></div>
+          <footer><span>6 modules</span><span>12% complete</span></footer>
+        </article>
+        <article class="course-card">
+          <small>YKI basics</small>
+          <h3>Simple answers for test situations</h3>
+          <p>Prepare for everyday YKI themes with guided answer structures and listening habits.</p>
+          <div class="progress-track" aria-label="Course progress 0 percent"><span class="progress-fill" style="width: 0%;"></span></div>
+          <footer><span>10 modules</span><span>Start today</span></footer>
+        </article>
+      </div>
+      <div class="learning-bottom" id="beginner-curriculum">
+        <div class="curriculum" aria-label="Beginner curriculum">
+          <div class="lesson-row">
+            <span class="lesson-number">1</span>
+            <div>
+              <h3>Greetings and first sentences</h3>
+              <p>Video lesson / 12 minutes / practice sheet</p>
+            </div>
+            <button type="button">Preview</button>
+          </div>
+          <div class="lesson-row">
+            <span class="lesson-number">2</span>
+            <div>
+              <h3>Talking about yourself</h3>
+              <p>Speaking prompt / 18 minutes / downloadable script</p>
+            </div>
+            <button type="button">Preview</button>
+          </div>
+          <div class="lesson-row">
+            <span class="lesson-number">3</span>
+            <div>
+              <h3>Shopping, time, and simple questions</h3>
+              <p>Listening task / 15 minutes / mini quiz</p>
+            </div>
+            <button type="button">Preview</button>
+          </div>
+        </div>
+        <aside class="mentor-card" aria-label="Mentor support">
+          <h3>Study with support</h3>
+          <p>Follow a weekly plan, save lessons, and prepare beginner answers for real conversations and future YKI practice.</p>
+          <a href="about.html">About Onrush</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+  <section class="prep-section" id="yki-preparation" aria-label="YKI preparation page">
+    <div class="prep-shell">
+      <div class="prep-hero">
+        <div>
+          <p class="prep-eyebrow">YKI Preparation</p>
+          <h1>Practice every part of the YKI test.</h1>
+          <p>Build a focused study path for the four exam skills with practical tasks, timed prompts, and simple routines for steady progress.</p>
+        </div>
+        <aside class="prep-badge" aria-label="YKI preparation modules">
+          <strong>4</strong>
+          <span>Skill areas</span>
+        </aside>
+      </div>
+      <div class="prep-grid" aria-label="YKI skill areas">
+        <article class="prep-card">
+          <span class="prep-card-number">1</span>
+          <h2>Speaking</h2>
+          <p>Practice short answers, everyday situations, opinions, and clear speaking structure for timed YKI prompts.</p>
+          <ul>
+            <li>Answer templates</li>
+            <li>Pronunciation rhythm</li>
+            <li>Timed speaking drills</li>
+          </ul>
+        </article>
+        <article class="prep-card">
+          <span class="prep-card-number">2</span>
+          <h2>Reading</h2>
+          <p>Train with messages, notices, short articles, forms, and question types that reward fast scanning.</p>
+          <ul>
+            <li>Main idea practice</li>
+            <li>Keyword scanning</li>
+            <li>Everyday text tasks</li>
+          </ul>
+        </article>
+        <article class="prep-card">
+          <span class="prep-card-number">3</span>
+          <h2>Writing</h2>
+          <p>Build simple emails, opinions, descriptions, and responses with reusable sentence frames.</p>
+          <ul>
+            <li>Email structure</li>
+            <li>Opinion writing</li>
+            <li>Useful connectors</li>
+          </ul>
+        </article>
+        <article class="prep-card">
+          <span class="prep-card-number">4</span>
+          <h2>Listening</h2>
+          <p>Prepare for announcements, conversations, instructions, and choosing the most important information.</p>
+          <ul>
+            <li>Listening habits</li>
+            <li>Context clues</li>
+            <li>Mini comprehension sets</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
   <section class="next-section" id="next-section" tabindex="-1" aria-label="YKI registration details">
     <div class="next-section-inner">
       <h1>YKI Exam</h1>
@@ -444,20 +1144,24 @@
     const menuButton = document.querySelector(".menu-button");
     const menuLinks = document.querySelectorAll(".menu-list a");
     const scrollCta = document.querySelector(".scroll-cta");
+    const learningSection = document.querySelector("#finnish-for-beginners");
+    const prepSection = document.querySelector("#yki-preparation");
     const scrollCtaRing = document.querySelector(".scroll-cta-ring");
-    const nextSection = document.querySelector("#next-section");
+    const nextSection = learningSection || document.querySelector("#next-section");
     const footerBanner = document.querySelector(".footer-banner");
     const skipLoader = new URLSearchParams(window.location.search).get("skipLoader") === "1";
     const startTime = Date.now();
     let timerId = null;
     let finishId = null;
     let menuFlowId = null;
+    let initialHashHandled = false;
 
     function paint(progress) {
       const percentage = Math.min(100, Math.round(progress * 100));
       const fill = `${(progress * 100).toFixed(3)}%`;
       root.style.setProperty("--fill", fill);
       root.style.setProperty("--scale", progress.toFixed(4));
+      root.classList.toggle("is-loaded", progress === 1);
       body.classList.toggle("is-loaded", progress === 1);
       percentValues.forEach((value) => {
         value.textContent = percentage;
@@ -471,6 +1175,7 @@
       if (progress < 1) {
         timerId = window.setTimeout(tick, frameDelay);
       } else {
+        scrollToInitialHash("auto");
         timerId = null;
         finishId = null;
       }
@@ -484,6 +1189,7 @@
           window.clearTimeout(timerId);
         }
         paint(1);
+        scrollToInitialHash("auto");
         timerId = null;
         finishId = null;
       }, duration);
@@ -570,6 +1276,68 @@
       menuButton.setAttribute("aria-expanded", String(open));
     }
 
+    function scrollToTarget(target, behavior = "smooth") {
+      const top = target.getBoundingClientRect().top + window.scrollY;
+      const scrollRoot = document.scrollingElement || document.documentElement;
+
+      if (behavior === "auto") {
+        scrollRoot.scrollTop = top;
+        window.scrollTo(0, top);
+        return;
+      }
+
+      window.scrollTo({ top, behavior });
+    }
+
+    function setActiveView(view) {
+      const learningOpen = view === "learning";
+      const prepOpen = view === "prep";
+
+      body.classList.toggle("learning-view", learningOpen);
+      root.classList.toggle("learning-view", learningOpen);
+      body.classList.toggle("prep-view", prepOpen);
+      root.classList.toggle("prep-view", prepOpen);
+    }
+
+    function syncLearningViewFromHash() {
+      const hash = window.location.hash;
+
+      if (hash === "#finnish-for-beginners") {
+        setActiveView("learning");
+      } else if (hash === "#yki-preparation") {
+        setActiveView("prep");
+      } else {
+        setActiveView("");
+      }
+    }
+
+    function getCurrentHashTarget() {
+      const hash = window.location.hash.slice(1);
+      return hash && hash !== "home" ? document.getElementById(hash) : null;
+    }
+
+    function scrollCurrentHash(behavior = "auto") {
+      const target = getCurrentHashTarget();
+
+      if (!target) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => scrollToTarget(target, behavior));
+      window.setTimeout(() => scrollToTarget(target, behavior), 160);
+      window.setTimeout(() => scrollToTarget(target, behavior), 420);
+    }
+
+    function scrollToInitialHash(behavior = "auto") {
+      if (initialHashHandled) {
+        return;
+      }
+
+      initialHashHandled = true;
+      syncLearningViewFromHash();
+      scrollCurrentHash(behavior);
+    }
+
     menuButton.addEventListener("click", () => {
       const menuIsOpen = !body.classList.contains("menu-open");
 
@@ -579,24 +1347,47 @@
 
     menuLinks.forEach((link) => {
       link.addEventListener("click", (event) => {
-        const href = link.getAttribute("href");
-        const target = href ? document.querySelector(href) : null;
+        const href = link.getAttribute("href") || "";
+        const menuWasOpen = body.classList.contains("menu-open");
+        const opensLearning = href === "#finnish-for-beginners";
+        const opensPrep = href === "#yki-preparation";
+        const opensHome = href === "#home";
 
-        if (target) {
+        if (opensLearning || opensPrep || opensHome) {
           event.preventDefault();
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-          window.history.pushState(null, "", href);
         }
 
-        if (body.classList.contains("menu-open")) {
+        if (menuWasOpen) {
           animateMenu(false);
           setMenuButtonState(false);
+        }
+
+        if (opensLearning || opensPrep || opensHome) {
+          window.setTimeout(() => {
+            window.history.pushState(null, "", href);
+            setActiveView(opensLearning ? "learning" : opensPrep ? "prep" : "");
+          }, menuWasOpen ? menuFlowDuration + 40 : 0);
         }
       });
     });
 
+    window.addEventListener("hashchange", () => {
+      syncLearningViewFromHash();
+    });
+
+    window.addEventListener("load", () => {
+      window.setTimeout(() => {
+        syncLearningViewFromHash();
+      }, duration + 700);
+    });
+
     scrollCta.addEventListener("click", () => {
-      nextSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (nextSection.id) {
+        window.history.pushState(null, "", `#${nextSection.id}`);
+        setActiveView(nextSection === learningSection ? "learning" : nextSection === prepSection ? "prep" : "");
+      } else {
+        scrollToTarget(nextSection);
+      }
     });
 
     footerBanner.addEventListener("pointerenter", () => {
@@ -618,7 +1409,10 @@
     buildScrollCtaRing();
     if (skipLoader) {
       paint(1);
-      window.history.replaceState(null, "", "index.html#home");
+      scrollToInitialHash("auto");
+      if (!window.location.hash || window.location.hash === "#home") {
+        window.history.replaceState(null, "", "index.html#home");
+      }
     } else {
       start();
     }

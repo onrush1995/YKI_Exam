@@ -860,11 +860,106 @@
       transform: translateY(-6px);
     }
 
+    body.prep-view:not(.speaking-practice-open) .prep-section {
+      display: grid;
+      min-height: 100dvh;
+      align-items: center;
+      padding-top: clamp(54px, 7vw, 82px);
+      padding-bottom: clamp(46px, 7vw, 82px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-shell {
+      gap: clamp(20px, 3vw, 32px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-hero {
+      grid-template-columns: minmax(0, 1fr) minmax(130px, 190px);
+      gap: clamp(18px, 3vw, 32px);
+      padding-bottom: clamp(18px, 3vw, 28px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-hero h1 {
+      max-width: 720px;
+      font-size: clamp(42px, 8vw, 88px);
+      line-height: 0.9;
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-hero p {
+      max-width: 640px;
+      margin-top: clamp(14px, 2vw, 22px);
+      font-size: clamp(16px, 2vw, 21px);
+      line-height: 1.22;
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-eyebrow {
+      margin-bottom: 10px;
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-badge {
+      gap: 6px;
+      padding: clamp(16px, 2vw, 20px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-badge strong {
+      font-size: clamp(30px, 4vw, 46px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-grid {
+      gap: clamp(12px, 2vw, 18px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-card {
+      gap: 12px;
+      min-height: 0;
+      padding: clamp(16px, 2.4vw, 22px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-card-number {
+      width: 40px;
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-card h2 {
+      font-size: clamp(24px, 3vw, 34px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-card p {
+      font-size: clamp(14px, 1.6vw, 16px);
+      line-height: 1.28;
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-card ul {
+      gap: 6px;
+      font-size: 13px;
+    }
+
     .speaking-showcase {
       display: grid;
       gap: clamp(22px, 4vw, 38px);
       border-top: 1px solid rgba(255, 255, 255, 0.2);
       padding-top: clamp(30px, 6vw, 58px);
+    }
+
+    body:not(.speaking-practice-open) .speaking-showcase {
+      display: none;
+    }
+
+    body.speaking-practice-open .speaking-showcase {
+      animation: speakingSectionReveal 420ms cubic-bezier(0.21, 0.8, 0.24, 1) both;
+    }
+
+    body.speaking-practice-open .prep-hero,
+    body.speaking-practice-open .prep-grid {
+      display: none;
+    }
+
+    body.speaking-practice-open .prep-shell {
+      gap: 0;
+    }
+
+    body.speaking-practice-open .speaking-showcase {
+      min-height: calc(100dvh - clamp(152px, 24vw, 264px));
+      border-top: 0;
+      padding-top: 0;
     }
 
     .speaking-showcase-header {
@@ -905,6 +1000,30 @@
       flex-wrap: wrap;
       gap: clamp(16px, 2.2vw, 24px);
       align-items: stretch;
+    }
+
+    .dialogi-section {
+      display: flex;
+      flex: 1 1 250px;
+      min-width: 0;
+    }
+
+    .dialogi-section .speaking-poster {
+      flex: 1 1 250px;
+      width: 100%;
+    }
+
+    body.dialogi-open .dialogi-section {
+      display: grid;
+      flex: 1 1 100%;
+      grid-template-columns: minmax(250px, 0.34fr) minmax(0, 1fr);
+      gap: clamp(16px, 2.2vw, 24px);
+      align-items: stretch;
+    }
+
+    body.dialogi-open .dialogi-section .speaking-poster {
+      flex: initial;
+      min-height: 0;
     }
 
     .speaking-poster {
@@ -1145,13 +1264,18 @@
     }
 
     .dialogi-practice {
-      display: grid;
+      display: none;
       gap: clamp(18px, 3vw, 28px);
       border: 1px solid rgba(255, 255, 255, 0.16);
       border-radius: 8px;
       background: #f8f8f4;
       color: #101312;
       padding: clamp(20px, 4vw, 34px);
+    }
+
+    body.dialogi-open .dialogi-section .dialogi-practice {
+      display: grid;
+      animation: dialogiReveal 420ms cubic-bezier(0.21, 0.8, 0.24, 1) both;
     }
 
     .dialogi-practice-header {
@@ -1324,6 +1448,30 @@
       }
     }
 
+    @keyframes dialogiReveal {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes speakingSectionReveal {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     @keyframes stackSlide {
       50% {
         transform: translate(9px, -14px) rotate(4deg);
@@ -1338,6 +1486,14 @@
       .speaking-tilt,
       .speaking-blob,
       .speaking-stack {
+        animation: none;
+      }
+
+      body.dialogi-open .dialogi-section .dialogi-practice {
+        animation: none;
+      }
+
+      body.speaking-practice-open .speaking-showcase {
         animation: none;
       }
 
@@ -1369,6 +1525,45 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
+      body.prep-view:not(.speaking-practice-open) .prep-section {
+        align-items: start;
+        padding-top: clamp(46px, 8vw, 68px);
+        padding-bottom: clamp(34px, 7vw, 58px);
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-hero {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-hero h1 {
+        font-size: clamp(36px, 8vw, 62px);
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-hero p {
+        font-size: 15px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-badge {
+        width: 108px;
+        padding: 14px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-badge strong {
+        font-size: 30px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-card {
+        min-height: 150px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-card ul {
+        display: none;
+      }
+
+      .dialogi-section {
+        grid-template-columns: 1fr;
+      }
+
       .lesson-row {
         grid-template-columns: auto minmax(0, 1fr);
       }
@@ -1382,6 +1577,40 @@
     @media (max-width: 640px) {
       .prep-grid {
         grid-template-columns: 1fr;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-shell {
+        gap: 16px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-hero {
+        grid-template-columns: 1fr;
+        padding-bottom: 16px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-badge {
+        display: none;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-card {
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 8px 12px;
+        align-items: start;
+        min-height: 0;
+        padding: 14px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-card-number {
+        grid-row: 1 / 3;
+        width: 36px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-card h2 {
+        font-size: 24px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-card p {
+        font-size: 14px;
       }
 
       .speaking-poster {
@@ -1665,6 +1894,7 @@
           <p>Four focused YKI speaking formats, shown as animated practice posters for quick scanning and repeated study.</p>
         </div>
         <div class="speaking-posters">
+          <section class="dialogi-section" id="dialogi-practice" aria-label="Dialogi section">
           <a class="speaking-poster poster-dialogi" href="#dialogi-practice" style="--mark: #20b98b;" aria-label="Open Dialogi recording practice">
             <div class="speaking-art" aria-hidden="true">
               <svg viewBox="0 0 240 300">
@@ -1705,6 +1935,139 @@
               <footer class="poster-foot"><span>YKI speaking practice</span><span>2026</span></footer>
             </div>
           </a>
+          <div class="dialogi-practice" hidden aria-label="Dialogi recording practice">
+            <div class="dialogi-practice-header">
+              <h3>Dialogi</h3>
+              <span>001 / record</span>
+            </div>
+            <p class="dialogi-intro">Aiot järjestää isot juhlat. Tarvitset juhlaa varten tilan ja päätät vuokrata juhlasalin. Keksi, mikä juhla on kyseessä. Sinulle soitetaan juhlapalvelusta, koska olet jättänyt sinne viestin.</p>
+            <div class="dialogi-script">
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+              <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-1" data-seconds="20">
+                <strong>SINÄ:</strong>
+                <span class="dialogi-turn-text">[Esittele itsesi ja kerro asiasi.] (20 sek)</span>
+                <div class="dialogi-recorder">
+                  <button type="button" data-record-dialogi>Record</button>
+                  <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
+                  <button type="button" data-play-dialogi disabled>Replay</button>
+                  <button type="button" data-delete-dialogi disabled>Delete</button>
+                  <span class="dialogi-timer" aria-live="polite">20 sek</span>
+                  <span class="dialogi-save-state" aria-live="polite">No recording</span>
+                  <audio class="dialogi-audio" controls hidden></audio>
+                </div>
+              </div>
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+              <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-2" data-seconds="20">
+                <strong>SINÄ:</strong>
+                <span class="dialogi-turn-text">[Kerro vieraiden lukumäärä ja juhlan ajankohta.] (20 sek)</span>
+                <div class="dialogi-recorder">
+                  <button type="button" data-record-dialogi>Record</button>
+                  <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
+                  <button type="button" data-play-dialogi disabled>Replay</button>
+                  <button type="button" data-delete-dialogi disabled>Delete</button>
+                  <span class="dialogi-timer" aria-live="polite">20 sek</span>
+                  <span class="dialogi-save-state" aria-live="polite">No recording</span>
+                  <audio class="dialogi-audio" controls hidden></audio>
+                </div>
+              </div>
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+              <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-3" data-seconds="10">
+                <strong>SINÄ:</strong>
+                <span class="dialogi-turn-text">[Vastaa.] (10 sek)</span>
+                <div class="dialogi-recorder">
+                  <button type="button" data-record-dialogi>Record</button>
+                  <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
+                  <button type="button" data-play-dialogi disabled>Replay</button>
+                  <button type="button" data-delete-dialogi disabled>Delete</button>
+                  <span class="dialogi-timer" aria-live="polite">10 sek</span>
+                  <span class="dialogi-save-state" aria-live="polite">No recording</span>
+                  <audio class="dialogi-audio" controls hidden></audio>
+                </div>
+              </div>
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+              <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-4" data-seconds="15">
+                <strong>SINÄ:</strong>
+                <span class="dialogi-turn-text">[Vastaa.] (15 sek)</span>
+                <div class="dialogi-recorder">
+                  <button type="button" data-record-dialogi>Record</button>
+                  <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
+                  <button type="button" data-play-dialogi disabled>Replay</button>
+                  <button type="button" data-delete-dialogi disabled>Delete</button>
+                  <span class="dialogi-timer" aria-live="polite">15 sek</span>
+                  <span class="dialogi-save-state" aria-live="polite">No recording</span>
+                  <audio class="dialogi-audio" controls hidden></audio>
+                </div>
+              </div>
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+              <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-5" data-seconds="20">
+                <strong>SINÄ:</strong>
+                <span class="dialogi-turn-text">[Kysy jotakin tarkemmin ruokailusta.] (20 sek)</span>
+                <div class="dialogi-recorder">
+                  <button type="button" data-record-dialogi>Record</button>
+                  <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
+                  <button type="button" data-play-dialogi disabled>Replay</button>
+                  <button type="button" data-delete-dialogi disabled>Delete</button>
+                  <span class="dialogi-timer" aria-live="polite">20 sek</span>
+                  <span class="dialogi-save-state" aria-live="polite">No recording</span>
+                  <audio class="dialogi-audio" controls hidden></audio>
+                </div>
+              </div>
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+              <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-6" data-seconds="10">
+                <strong>SINÄ:</strong>
+                <span class="dialogi-turn-text">[Kysy hintaa.] (10 sek)</span>
+                <div class="dialogi-recorder">
+                  <button type="button" data-record-dialogi>Record</button>
+                  <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
+                  <button type="button" data-play-dialogi disabled>Replay</button>
+                  <button type="button" data-delete-dialogi disabled>Delete</button>
+                  <span class="dialogi-timer" aria-live="polite">10 sek</span>
+                  <span class="dialogi-save-state" aria-live="polite">No recording</span>
+                  <audio class="dialogi-audio" controls hidden></audio>
+                </div>
+              </div>
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+              <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-7" data-seconds="10">
+                <strong>SINÄ:</strong>
+                <span class="dialogi-turn-text">[Lopeta puhelu.] (10 sek)</span>
+                <div class="dialogi-recorder">
+                  <button type="button" data-record-dialogi>Record</button>
+                  <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
+                  <button type="button" data-play-dialogi disabled>Replay</button>
+                  <button type="button" data-delete-dialogi disabled>Delete</button>
+                  <span class="dialogi-timer" aria-live="polite">10 sek</span>
+                  <span class="dialogi-save-state" aria-live="polite">No recording</span>
+                  <audio class="dialogi-audio" controls hidden></audio>
+                </div>
+              </div>
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+            </div>
+          </div>
+          </section>
           <article class="speaking-poster poster-tilanne" style="--mark: #ffd22e;">
             <div class="speaking-art" aria-hidden="true">
               <svg viewBox="0 0 240 300">
@@ -1796,138 +2159,6 @@
             </div>
           </article>
         </div>
-        <section class="dialogi-practice" id="dialogi-practice" aria-label="Dialogi recording practice">
-          <div class="dialogi-practice-header">
-            <h3>Dialogi</h3>
-            <span>001 / record</span>
-          </div>
-          <p class="dialogi-intro">Aiot järjestää isot juhlat. Tarvitset juhlaa varten tilan ja päätät vuokrata juhlasalin. Keksi, mikä juhla on kyseessä. Sinulle soitetaan juhlapalvelusta, koska olet jättänyt sinne viestin.</p>
-          <div class="dialogi-script">
-            <div class="dialogi-turn dialogi-man">
-              <strong>Mies:</strong>
-              <span class="dialogi-turn-text">*****</span>
-            </div>
-            <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-1" data-seconds="20">
-              <strong>SINÄ:</strong>
-              <span class="dialogi-turn-text">[Esittele itsesi ja kerro asiasi.] (20 sek)</span>
-              <div class="dialogi-recorder">
-                <button type="button" data-record-dialogi>Record</button>
-                <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
-                <button type="button" data-play-dialogi disabled>Replay</button>
-                <button type="button" data-delete-dialogi disabled>Delete</button>
-                <span class="dialogi-timer" aria-live="polite">20 sek</span>
-                <span class="dialogi-save-state" aria-live="polite">No recording</span>
-                <audio class="dialogi-audio" controls hidden></audio>
-              </div>
-            </div>
-            <div class="dialogi-turn dialogi-man">
-              <strong>Mies:</strong>
-              <span class="dialogi-turn-text">*****</span>
-            </div>
-            <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-2" data-seconds="20">
-              <strong>SINÄ:</strong>
-              <span class="dialogi-turn-text">[Kerro vieraiden lukumäärä ja juhlan ajankohta.] (20 sek)</span>
-              <div class="dialogi-recorder">
-                <button type="button" data-record-dialogi>Record</button>
-                <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
-                <button type="button" data-play-dialogi disabled>Replay</button>
-                <button type="button" data-delete-dialogi disabled>Delete</button>
-                <span class="dialogi-timer" aria-live="polite">20 sek</span>
-                <span class="dialogi-save-state" aria-live="polite">No recording</span>
-                <audio class="dialogi-audio" controls hidden></audio>
-              </div>
-            </div>
-            <div class="dialogi-turn dialogi-man">
-              <strong>Mies:</strong>
-              <span class="dialogi-turn-text">*****</span>
-            </div>
-            <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-3" data-seconds="10">
-              <strong>SINÄ:</strong>
-              <span class="dialogi-turn-text">[Vastaa.] (10 sek)</span>
-              <div class="dialogi-recorder">
-                <button type="button" data-record-dialogi>Record</button>
-                <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
-                <button type="button" data-play-dialogi disabled>Replay</button>
-                <button type="button" data-delete-dialogi disabled>Delete</button>
-                <span class="dialogi-timer" aria-live="polite">10 sek</span>
-                <span class="dialogi-save-state" aria-live="polite">No recording</span>
-                <audio class="dialogi-audio" controls hidden></audio>
-              </div>
-            </div>
-            <div class="dialogi-turn dialogi-man">
-              <strong>Mies:</strong>
-              <span class="dialogi-turn-text">*****</span>
-            </div>
-            <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-4" data-seconds="15">
-              <strong>SINÄ:</strong>
-              <span class="dialogi-turn-text">[Vastaa.] (15 sek)</span>
-              <div class="dialogi-recorder">
-                <button type="button" data-record-dialogi>Record</button>
-                <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
-                <button type="button" data-play-dialogi disabled>Replay</button>
-                <button type="button" data-delete-dialogi disabled>Delete</button>
-                <span class="dialogi-timer" aria-live="polite">15 sek</span>
-                <span class="dialogi-save-state" aria-live="polite">No recording</span>
-                <audio class="dialogi-audio" controls hidden></audio>
-              </div>
-            </div>
-            <div class="dialogi-turn dialogi-man">
-              <strong>Mies:</strong>
-              <span class="dialogi-turn-text">*****</span>
-            </div>
-            <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-5" data-seconds="20">
-              <strong>SINÄ:</strong>
-              <span class="dialogi-turn-text">[Kysy jotakin tarkemmin ruokailusta.] (20 sek)</span>
-              <div class="dialogi-recorder">
-                <button type="button" data-record-dialogi>Record</button>
-                <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
-                <button type="button" data-play-dialogi disabled>Replay</button>
-                <button type="button" data-delete-dialogi disabled>Delete</button>
-                <span class="dialogi-timer" aria-live="polite">20 sek</span>
-                <span class="dialogi-save-state" aria-live="polite">No recording</span>
-                <audio class="dialogi-audio" controls hidden></audio>
-              </div>
-            </div>
-            <div class="dialogi-turn dialogi-man">
-              <strong>Mies:</strong>
-              <span class="dialogi-turn-text">*****</span>
-            </div>
-            <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-6" data-seconds="10">
-              <strong>SINÄ:</strong>
-              <span class="dialogi-turn-text">[Kysy hintaa.] (10 sek)</span>
-              <div class="dialogi-recorder">
-                <button type="button" data-record-dialogi>Record</button>
-                <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
-                <button type="button" data-play-dialogi disabled>Replay</button>
-                <button type="button" data-delete-dialogi disabled>Delete</button>
-                <span class="dialogi-timer" aria-live="polite">10 sek</span>
-                <span class="dialogi-save-state" aria-live="polite">No recording</span>
-                <audio class="dialogi-audio" controls hidden></audio>
-              </div>
-            </div>
-            <div class="dialogi-turn dialogi-man">
-              <strong>Mies:</strong>
-              <span class="dialogi-turn-text">*****</span>
-            </div>
-            <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-7" data-seconds="10">
-              <strong>SINÄ:</strong>
-              <span class="dialogi-turn-text">[Lopeta puhelu.] (10 sek)</span>
-              <div class="dialogi-recorder">
-                <button type="button" data-record-dialogi>Record</button>
-                <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
-                <button type="button" data-play-dialogi disabled>Replay</button>
-                <button type="button" data-delete-dialogi disabled>Delete</button>
-                <span class="dialogi-timer" aria-live="polite">10 sek</span>
-                <span class="dialogi-save-state" aria-live="polite">No recording</span>
-                <audio class="dialogi-audio" controls hidden></audio>
-              </div>
-            </div>
-            <div class="dialogi-turn dialogi-man">
-              <strong>Mies:</strong>
-              <span class="dialogi-turn-text">*****</span>
-            </div>
-          </div>
-        </section>
       </section>
     </div>
   </section>
@@ -1955,6 +2186,7 @@
     const nextSection = learningSection || document.querySelector("#next-section");
     const footerBanner = document.querySelector(".footer-banner");
     const dialogiPoster = document.querySelector(".poster-dialogi");
+    const dialogiPractice = document.querySelector(".dialogi-section > .dialogi-practice");
     const dialogiTurns = document.querySelectorAll("[data-dialogi-turn]");
     const skipLoader = new URLSearchParams(window.location.search).get("skipLoader") === "1";
     const startTime = Date.now();
@@ -2419,6 +2651,20 @@
       root.classList.toggle("prep-view", prepOpen);
     }
 
+    function setDialogiPracticeOpen(open) {
+      body.classList.toggle("dialogi-open", open);
+      root.classList.toggle("dialogi-open", open);
+
+      if (dialogiPractice) {
+        dialogiPractice.hidden = !open;
+      }
+    }
+
+    function setSpeakingPracticeOpen(open) {
+      body.classList.toggle("speaking-practice-open", open);
+      root.classList.toggle("speaking-practice-open", open);
+    }
+
     function syncLearningViewFromHash() {
       const hash = window.location.hash;
 
@@ -2429,6 +2675,9 @@
       } else {
         setActiveView("");
       }
+
+      setSpeakingPracticeOpen(hash === "#speaking-practice" || hash === "#dialogi-practice");
+      setDialogiPracticeOpen(hash === "#dialogi-practice");
     }
 
     function getCurrentHashTarget() {
@@ -2485,7 +2734,8 @@
         if (opensLearning || opensPrep || opensHome) {
           window.setTimeout(() => {
             window.history.pushState(null, "", href);
-            setActiveView(opensLearning ? "learning" : opensPrep ? "prep" : "");
+            syncLearningViewFromHash();
+            scrollCurrentHash("auto");
           }, menuWasOpen ? menuFlowDuration + 40 : 0);
         }
       });
@@ -2500,7 +2750,7 @@
         }
 
         window.history.pushState(null, "", "#dialogi-practice");
-        setActiveView("prep");
+        syncLearningViewFromHash();
         window.setTimeout(() => scrollToTarget(target, "auto"), 0);
       }
 
@@ -2562,7 +2812,7 @@
     scrollCta.addEventListener("click", () => {
       if (nextSection.id) {
         window.history.pushState(null, "", `#${nextSection.id}`);
-        setActiveView(nextSection === learningSection ? "learning" : nextSection === prepSection ? "prep" : "");
+        syncLearningViewFromHash();
       } else {
         scrollToTarget(nextSection);
       }

@@ -29,19 +29,19 @@
     }
 
     html {
+      overflow-y: scroll;
       scroll-behavior: smooth;
     }
 
     body {
       min-height: 100vh;
-      overflow-x: hidden;
-      overflow-y: hidden;
+      overflow-x: clip;
+      overflow-y: visible;
       background: #fff;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     body.is-loaded {
-      overflow-y: auto;
       background: #000;
     }
 
@@ -80,8 +80,10 @@
       transition: opacity 180ms ease;
     }
 
-    .is-loaded .percent {
+    body.is-loaded .percent {
       opacity: 0;
+      pointer-events: none;
+      transition: none;
     }
 
     .percent-black {
@@ -140,9 +142,10 @@
       transform: translate(-50%, calc(-50% + clamp(7px, 1.4vw, 9px)));
     }
 
-    .is-loaded .menu-button {
+    body.is-loaded .menu-button {
       opacity: 1;
       pointer-events: auto;
+      transition: none;
     }
 
     body.menu-open .menu-button {
@@ -217,10 +220,11 @@
       transition: opacity 220ms ease, transform 220ms ease;
     }
 
-    .is-loaded .scroll-cta {
+    body.is-loaded .scroll-cta {
       opacity: 1;
       pointer-events: auto;
       transform: translateY(0);
+      transition: transform 180ms ease;
     }
 
     body.menu-open .scroll-cta {
@@ -293,9 +297,10 @@
       transition: background-color 180ms ease, color 180ms ease, opacity 180ms ease;
     }
 
-    .is-loaded .footer-banner {
+    body.is-loaded .footer-banner {
       opacity: 1;
       pointer-events: auto;
+      transition: background-color 180ms ease, color 180ms ease;
     }
 
     body.menu-open .footer-banner {
@@ -326,6 +331,1309 @@
       letter-spacing: 0;
       line-height: 1.2;
       white-space: nowrap;
+    }
+
+    .learning-section {
+      background: #f6f7f1;
+      color: #161313;
+      padding: clamp(76px, 12vw, 132px) max(var(--edge), env(safe-area-inset-left)) calc(clamp(96px, 14vw, 148px) + env(safe-area-inset-bottom));
+      scroll-margin-top: 0;
+    }
+
+    body.learning-view {
+      background: #f6f7f1;
+    }
+
+    body.prep-view {
+      background: #101312;
+    }
+
+    body.learning-view .learning-section,
+    body.prep-view .prep-section {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      overflow-y: auto;
+    }
+
+    body.learning-view .page,
+    body.prep-view .page {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      min-height: 100dvh;
+      pointer-events: none;
+    }
+
+    body.learning-view .page::before,
+    body.prep-view .page::before {
+      opacity: 0;
+    }
+
+    body.learning-view .menu-button {
+      color: #161313;
+      pointer-events: auto;
+    }
+
+    body.prep-view .menu-button {
+      color: #fff;
+      pointer-events: auto;
+    }
+
+    body.prep-view.menu-open .menu-button {
+      color: #000;
+    }
+
+    body.learning-view .menu-panel,
+    body.learning-view .footer-banner,
+    body.prep-view .menu-panel,
+    body.prep-view .footer-banner {
+      pointer-events: auto;
+    }
+
+    body.learning-view .scroll-cta,
+    body.prep-view .scroll-cta {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .learning-shell {
+      display: grid;
+      gap: clamp(34px, 6vw, 72px);
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .learning-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 440px);
+      gap: clamp(28px, 5vw, 64px);
+      align-items: stretch;
+    }
+
+    .learning-eyebrow {
+      margin: 0 0 18px;
+      color: #5f6f7c;
+      font-size: clamp(13px, 2vw, 16px);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .learning-hero h1 {
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(54px, 10vw, 126px);
+      font-weight: 950;
+      letter-spacing: 0;
+      line-height: 0.86;
+    }
+
+    .learning-hero p {
+      max-width: 690px;
+      margin: clamp(20px, 4vw, 34px) 0 0;
+      color: #34413b;
+      font-size: clamp(19px, 3vw, 28px);
+      font-weight: 720;
+      line-height: 1.18;
+    }
+
+    .learning-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: clamp(24px, 4vw, 38px);
+    }
+
+    .learning-actions a {
+      display: inline-flex;
+      min-height: 54px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      padding: 0 24px;
+      font-size: 15px;
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    .learning-actions a:first-child {
+      background: #161313;
+      color: #fff;
+    }
+
+    .course-preview {
+      display: grid;
+      overflow: hidden;
+      border: 1px solid rgba(22, 19, 19, 0.16);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 14px 14px 0 rgba(20, 61, 45, 0.16);
+    }
+
+    .preview-screen {
+      position: relative;
+      display: grid;
+      min-height: 250px;
+      place-items: center;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.14), transparent 40%),
+        #143d2d;
+      color: #fff;
+    }
+
+    .preview-screen svg {
+      width: min(76%, 300px);
+      height: auto;
+    }
+
+    .play-button {
+      position: absolute;
+      display: grid;
+      width: clamp(58px, 9vw, 78px);
+      aspect-ratio: 1;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.22);
+      color: #fff;
+      font-size: 30px;
+      font-weight: 900;
+    }
+
+    .preview-meta {
+      display: grid;
+      gap: 16px;
+      padding: clamp(20px, 3vw, 28px);
+    }
+
+    .preview-meta h2 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 38px);
+      font-weight: 930;
+      line-height: 0.98;
+    }
+
+    .course-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .course-stats span {
+      display: grid;
+      gap: 4px;
+      border-top: 1px solid rgba(22, 19, 19, 0.16);
+      padding-top: 10px;
+      color: #59675f;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .course-stats strong {
+      color: #161313;
+      font-size: clamp(18px, 3vw, 26px);
+      font-weight: 950;
+    }
+
+    .course-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .course-tabs a {
+      display: inline-flex;
+      min-height: 40px;
+      align-items: center;
+      border: 1px solid rgba(22, 19, 19, 0.22);
+      border-radius: 999px;
+      padding: 0 16px;
+      background: #fff;
+      font-size: 14px;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .course-tabs .is-active {
+      background: #161313;
+      color: #fff;
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(16px, 2.5vw, 24px);
+    }
+
+    .course-card {
+      display: grid;
+      gap: 18px;
+      min-height: 310px;
+      border: 1px solid rgba(22, 19, 19, 0.16);
+      border-radius: 8px;
+      background: #fff;
+      padding: clamp(22px, 3vw, 30px);
+    }
+
+    .course-card small {
+      color: #5f6f7c;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .course-card h3 {
+      margin: 0;
+      font-size: clamp(25px, 3.3vw, 40px);
+      font-weight: 930;
+      line-height: 0.98;
+    }
+
+    .course-card p {
+      margin: 0;
+      color: #3d4b44;
+      font-size: clamp(15px, 2vw, 18px);
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .progress-track {
+      overflow: hidden;
+      height: 8px;
+      border-radius: 999px;
+      background: #e3e7dc;
+    }
+
+    .progress-fill {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: #143d2d;
+    }
+
+    .course-card footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: auto;
+      color: #59675f;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .learning-bottom {
+      display: grid;
+      grid-template-columns: minmax(0, 0.75fr) minmax(280px, 0.25fr);
+      gap: clamp(18px, 4vw, 38px);
+      align-items: start;
+    }
+
+    .curriculum {
+      display: grid;
+      border: 1px solid rgba(22, 19, 19, 0.16);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .lesson-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      padding: clamp(18px, 3vw, 24px);
+      border-bottom: 1px solid rgba(22, 19, 19, 0.12);
+    }
+
+    .lesson-row:last-child {
+      border-bottom: 0;
+    }
+
+    .lesson-number {
+      display: grid;
+      width: 44px;
+      aspect-ratio: 1;
+      place-items: center;
+      border-radius: 50%;
+      background: #f0f2ea;
+      font-weight: 950;
+    }
+
+    .lesson-row h3 {
+      margin: 0 0 4px;
+      font-size: clamp(19px, 2.5vw, 26px);
+      font-weight: 900;
+      line-height: 1.05;
+    }
+
+    .lesson-row p {
+      margin: 0;
+      color: #59675f;
+      font-size: 14px;
+      font-weight: 720;
+    }
+
+    .lesson-row button,
+    .mentor-card a {
+      min-height: 42px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 900;
+      padding: 0 16px;
+    }
+
+    .mentor-card {
+      display: grid;
+      gap: 18px;
+      border: 1px solid rgba(22, 19, 19, 0.16);
+      border-radius: 8px;
+      background: #161313;
+      color: #fff;
+      padding: clamp(22px, 3vw, 30px);
+    }
+
+    .mentor-card h3 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1;
+    }
+
+    .mentor-card p {
+      margin: 0;
+      color: #d8ded6;
+      font-size: 16px;
+      font-weight: 650;
+      line-height: 1.38;
+    }
+
+    .prep-section {
+      background: #101312;
+      color: #fff;
+      padding: clamp(76px, 12vw, 132px) max(var(--edge), env(safe-area-inset-left)) calc(clamp(96px, 14vw, 148px) + env(safe-area-inset-bottom));
+      scroll-margin-top: 0;
+    }
+
+    .prep-shell {
+      display: grid;
+      gap: clamp(34px, 6vw, 68px);
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .prep-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
+      gap: clamp(24px, 5vw, 54px);
+      align-items: end;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding-bottom: clamp(28px, 5vw, 46px);
+    }
+
+    .prep-eyebrow {
+      margin: 0 0 16px;
+      color: #9bb0b8;
+      font-size: clamp(13px, 2vw, 16px);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .prep-hero h1 {
+      max-width: 840px;
+      margin: 0;
+      font-size: clamp(56px, 11vw, 130px);
+      font-weight: 950;
+      letter-spacing: 0;
+      line-height: 0.86;
+    }
+
+    .prep-hero p {
+      max-width: 720px;
+      margin: clamp(20px, 4vw, 34px) 0 0;
+      color: #dbe3df;
+      font-size: clamp(19px, 3vw, 28px);
+      font-weight: 720;
+      line-height: 1.18;
+    }
+
+    .prep-badge {
+      display: grid;
+      gap: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      border-radius: 8px;
+      padding: clamp(20px, 3vw, 28px);
+    }
+
+    .prep-badge strong {
+      font-size: clamp(34px, 7vw, 64px);
+      line-height: 0.9;
+    }
+
+    .prep-badge span {
+      color: #9bb0b8;
+      font-size: 14px;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .prep-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: clamp(16px, 2.5vw, 24px);
+    }
+
+    .prep-card {
+      display: grid;
+      gap: 18px;
+      min-height: 360px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      background: #fff;
+      color: #161313;
+      padding: clamp(22px, 3vw, 30px);
+    }
+
+    .prep-card-number {
+      display: grid;
+      width: 48px;
+      aspect-ratio: 1;
+      place-items: center;
+      border-radius: 50%;
+      background: #143d2d;
+      color: #fff;
+      font-weight: 950;
+    }
+
+    .prep-card h2 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 940;
+      line-height: 0.94;
+    }
+
+    .prep-card p {
+      margin: 0;
+      color: #3d4b44;
+      font-size: clamp(15px, 2vw, 18px);
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .prep-card ul {
+      display: grid;
+      gap: 8px;
+      margin: auto 0 0;
+      padding: 0;
+      color: #59675f;
+      font-size: 14px;
+      font-weight: 800;
+      list-style: none;
+    }
+
+    .prep-card li::before {
+      margin-right: 8px;
+      color: #143d2d;
+      content: "/";
+      font-weight: 950;
+    }
+
+    .prep-card-link {
+      color: #161313;
+      text-decoration: none;
+      transition: box-shadow 220ms ease, transform 220ms ease;
+    }
+
+    .prep-card-link:hover,
+    .prep-card-link:focus-visible {
+      box-shadow: 0 18px 0 rgba(255, 255, 255, 0.12);
+      outline: 0;
+      transform: translateY(-6px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-section {
+      display: grid;
+      min-height: 100dvh;
+      align-items: center;
+      padding-top: clamp(54px, 7vw, 82px);
+      padding-bottom: clamp(46px, 7vw, 82px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-shell {
+      gap: clamp(20px, 3vw, 32px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-hero {
+      grid-template-columns: minmax(0, 1fr) minmax(130px, 190px);
+      gap: clamp(18px, 3vw, 32px);
+      padding-bottom: clamp(18px, 3vw, 28px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-hero h1 {
+      max-width: 720px;
+      font-size: clamp(42px, 8vw, 88px);
+      line-height: 0.9;
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-hero p {
+      max-width: 640px;
+      margin-top: clamp(14px, 2vw, 22px);
+      font-size: clamp(16px, 2vw, 21px);
+      line-height: 1.22;
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-eyebrow {
+      margin-bottom: 10px;
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-badge {
+      gap: 6px;
+      padding: clamp(16px, 2vw, 20px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-badge strong {
+      font-size: clamp(30px, 4vw, 46px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-grid {
+      gap: clamp(12px, 2vw, 18px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-card {
+      gap: 12px;
+      min-height: 0;
+      padding: clamp(16px, 2.4vw, 22px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-card-number {
+      width: 40px;
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-card h2 {
+      font-size: clamp(24px, 3vw, 34px);
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-card p {
+      font-size: clamp(14px, 1.6vw, 16px);
+      line-height: 1.28;
+    }
+
+    body.prep-view:not(.speaking-practice-open) .prep-card ul {
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .speaking-showcase {
+      display: grid;
+      gap: clamp(22px, 4vw, 38px);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: clamp(30px, 6vw, 58px);
+    }
+
+    body:not(.speaking-practice-open) .speaking-showcase {
+      display: none;
+    }
+
+    body.speaking-practice-open .speaking-showcase {
+      animation: speakingSectionReveal 420ms cubic-bezier(0.21, 0.8, 0.24, 1) both;
+    }
+
+    body.speaking-practice-open .prep-hero,
+    body.speaking-practice-open .prep-grid {
+      display: none;
+    }
+
+    body.speaking-practice-open .prep-shell {
+      gap: 0;
+    }
+
+    body.speaking-practice-open .speaking-showcase {
+      min-height: calc(100dvh - clamp(152px, 24vw, 264px));
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .speaking-showcase-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 360px);
+      gap: clamp(20px, 5vw, 54px);
+      align-items: end;
+    }
+
+    .speaking-kicker {
+      margin: 0 0 14px;
+      color: #9bb0b8;
+      font-size: clamp(13px, 2vw, 16px);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .speaking-showcase h2 {
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(48px, 9vw, 104px);
+      font-weight: 950;
+      letter-spacing: 0;
+      line-height: 0.86;
+    }
+
+    .speaking-showcase-header p {
+      margin: 0;
+      color: #dbe3df;
+      font-size: clamp(16px, 2.4vw, 22px);
+      font-weight: 720;
+      line-height: 1.2;
+    }
+
+    .speaking-posters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(16px, 2.2vw, 24px);
+      align-items: stretch;
+    }
+
+    .dialogi-section {
+      display: flex;
+      flex: 1 1 250px;
+      min-width: 0;
+    }
+
+    .dialogi-section .speaking-poster {
+      flex: 1 1 250px;
+      width: 100%;
+    }
+
+    body.dialogi-open .dialogi-section {
+      display: grid;
+      flex: 1 1 100%;
+      grid-template-columns: minmax(250px, 0.34fr) minmax(0, 1fr);
+      gap: clamp(16px, 2.2vw, 24px);
+      align-items: stretch;
+    }
+
+    body.dialogi-open .dialogi-section .speaking-poster {
+      flex: initial;
+      min-height: 0;
+    }
+
+    .speaking-poster {
+      display: grid;
+      flex: 1 1 250px;
+      grid-template-rows: auto 1fr;
+      min-width: 0;
+      min-height: min(720px, 100%);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 4px;
+      background: #f8f8f4;
+      color: #101312;
+      box-shadow: 0 20px 42px rgba(0, 0, 0, 0.24);
+      text-decoration: none;
+      transform: translateY(26px);
+      animation: posterRise 760ms cubic-bezier(0.21, 0.8, 0.24, 1) both;
+      animation-delay: var(--delay, 0ms);
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+
+    .speaking-poster:hover {
+      box-shadow: 0 28px 58px rgba(0, 0, 0, 0.34);
+      transform: translateY(-8px);
+    }
+
+    .speaking-poster:nth-child(2) {
+      --delay: 100ms;
+    }
+
+    .speaking-poster:nth-child(3) {
+      --delay: 200ms;
+    }
+
+    .speaking-poster:nth-child(4) {
+      --delay: 300ms;
+    }
+
+    .speaking-art {
+      position: relative;
+      display: grid;
+      min-height: clamp(220px, 28vw, 360px);
+      aspect-ratio: 1 / 1;
+      place-items: center;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .speaking-art::before {
+      position: absolute;
+      inset: -18%;
+      z-index: -1;
+      background-image:
+        radial-gradient(circle at 26% 22%, rgba(255, 255, 255, 0.2), transparent 22%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 9px);
+      content: "";
+      opacity: 0.28;
+      animation: posterGrain 7s steps(2) infinite;
+    }
+
+    .poster-dialogi .speaking-art {
+      background: #ffd22e;
+      color: #b06b21;
+    }
+
+    .poster-tilanne .speaking-art {
+      background: #2f3ff0;
+      color: #f3d36c;
+    }
+
+    .poster-kertominen .speaking-art {
+      background: #d7d7d2;
+      color: #4354e8;
+    }
+
+    .poster-mielipide .speaking-art {
+      background: #ff7138;
+      color: #fff0d7;
+    }
+
+    .speaking-art svg {
+      width: min(78%, 300px);
+      height: auto;
+      overflow: visible;
+    }
+
+    .speaking-line {
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-width: 1.8;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .speaking-thin {
+      opacity: 0.42;
+      stroke-width: 1.25;
+    }
+
+    .speaking-draw {
+      stroke-dasharray: 540;
+      stroke-dashoffset: 540;
+      animation: drawLine 2200ms ease forwards, lineBreathe 5.6s ease-in-out 2200ms infinite;
+    }
+
+    .speaking-orbit {
+      transform-box: view-box;
+      transform-origin: 120px 150px;
+      animation: orbitSpin 14s linear infinite;
+    }
+
+    .speaking-tilt {
+      transform-box: view-box;
+      transform-origin: 120px 150px;
+      animation: orbitTilt 6s ease-in-out infinite;
+    }
+
+    .speaking-orbit.is-reverse {
+      animation-direction: reverse;
+      animation-duration: 18s;
+    }
+
+    .speaking-blob {
+      transform-box: view-box;
+      transform-origin: 120px 150px;
+      animation: blobFloat 4.8s ease-in-out infinite;
+    }
+
+    .speaking-blob.is-slow {
+      animation-delay: -1.4s;
+      animation-duration: 6.2s;
+    }
+
+    .speaking-stack {
+      transform-box: view-box;
+      transform-origin: 120px 150px;
+      animation: stackSlide 5.4s ease-in-out infinite;
+    }
+
+    .speaking-poster-body {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      gap: 16px;
+      padding: clamp(22px, 3vw, 30px);
+    }
+
+    .poster-mark {
+      width: 12px;
+      aspect-ratio: 1;
+      background: var(--mark, #143d2d);
+    }
+
+    .poster-index {
+      color: #8e8e8a;
+      font-size: clamp(34px, 5vw, 48px);
+      font-weight: 450;
+      line-height: 0.82;
+    }
+
+    .speaking-poster h3 {
+      max-width: 100%;
+      margin: -8px 0 0;
+      font-size: clamp(30px, 4vw, 54px);
+      font-weight: 950;
+      letter-spacing: 0;
+      line-height: 0.88;
+      overflow-wrap: anywhere;
+    }
+
+    .speaking-poster p {
+      min-height: 0;
+      margin: 0;
+      color: #20211f;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: clamp(12px, 1.45vw, 14px);
+      font-weight: 600;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .poster-rule {
+      height: 2px;
+      background: #20211f;
+    }
+
+    .poster-status {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(82px, 0.7fr);
+      gap: 14px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .poster-status strong {
+      font-size: clamp(21px, 2.6vw, 30px);
+      font-weight: 500;
+      line-height: 1;
+      overflow-wrap: anywhere;
+    }
+
+    .poster-slashes {
+      min-height: 72px;
+      background: repeating-linear-gradient(105deg, transparent 0 10px, #20211f 10px 12px, transparent 12px 18px);
+    }
+
+    .poster-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .poster-tools span {
+      display: grid;
+      min-width: 34px;
+      width: max-content;
+      aspect-ratio: 1;
+      place-items: center;
+      border: 1px dashed #20211f;
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 950;
+      line-height: 1;
+      padding: 0 8px;
+    }
+
+    .poster-foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: auto;
+      color: #b6b6b0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 10px;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .dialogi-practice {
+      display: none;
+      gap: clamp(18px, 3vw, 28px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 8px;
+      background: #f8f8f4;
+      color: #101312;
+      padding: clamp(20px, 4vw, 34px);
+    }
+
+    body.dialogi-open .dialogi-section .dialogi-practice {
+      display: grid;
+      animation: dialogiReveal 420ms cubic-bezier(0.21, 0.8, 0.24, 1) both;
+    }
+
+    .dialogi-practice-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: end;
+      border-bottom: 2px solid #101312;
+      padding-bottom: clamp(16px, 3vw, 24px);
+    }
+
+    .dialogi-practice h3 {
+      margin: 0;
+      font-size: clamp(32px, 6vw, 72px);
+      font-weight: 950;
+      letter-spacing: 0;
+      line-height: 0.88;
+    }
+
+    .dialogi-practice-header span {
+      color: #6e746f;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: clamp(16px, 2.2vw, 24px);
+      font-weight: 800;
+    }
+
+    .dialogi-intro {
+      margin: 0;
+      max-width: 980px;
+      color: #2b302d;
+      font-size: clamp(16px, 2.2vw, 22px);
+      font-weight: 720;
+      line-height: 1.28;
+    }
+
+    .dialogi-script {
+      display: grid;
+      gap: 10px;
+    }
+
+    .dialogi-turn {
+      display: grid;
+      grid-template-columns: minmax(82px, 0.14fr) minmax(0, 1fr);
+      gap: clamp(12px, 2vw, 20px);
+      align-items: start;
+      border: 1px solid rgba(16, 19, 18, 0.14);
+      background: #fff;
+      padding: clamp(14px, 2.4vw, 20px);
+    }
+
+    .dialogi-turn strong {
+      font-size: clamp(15px, 2vw, 18px);
+      font-weight: 950;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    .dialogi-turn-text {
+      min-width: 0;
+      color: #20211f;
+      font-size: clamp(15px, 2vw, 18px);
+      font-weight: 720;
+      line-height: 1.34;
+      overflow-wrap: anywhere;
+    }
+
+    .dialogi-man {
+      background: #eef0ec;
+    }
+
+    .dialogi-you {
+      border-color: #101312;
+      box-shadow: 8px 8px 0 rgba(20, 61, 45, 0.14);
+    }
+
+    .dialogi-recorder {
+      display: flex;
+      flex-wrap: wrap;
+      grid-column: 2;
+      gap: 8px;
+      align-items: center;
+      min-width: 0;
+      margin-top: 4px;
+    }
+
+    .dialogi-recorder button {
+      min-height: 38px;
+      border: 1px solid #101312;
+      border-radius: 999px;
+      background: #101312;
+      color: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 900;
+      padding: 0 14px;
+    }
+
+    .dialogi-recorder button:nth-of-type(2),
+    .dialogi-recorder button:nth-of-type(3),
+    .dialogi-recorder button:nth-of-type(4) {
+      background: transparent;
+      color: #101312;
+    }
+
+    .dialogi-recorder button:disabled {
+      cursor: not-allowed;
+      opacity: 0.42;
+    }
+
+    .dialogi-timer,
+    .dialogi-save-state {
+      color: #59675f;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .dialogi-audio {
+      width: min(100%, 420px);
+      height: 38px;
+    }
+
+    @keyframes posterRise {
+      from {
+        opacity: 0;
+        transform: translateY(26px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes posterGrain {
+      50% {
+        transform: translate(2%, -1%);
+      }
+    }
+
+    @keyframes drawLine {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes lineBreathe {
+      50% {
+        opacity: 0.55;
+      }
+    }
+
+    @keyframes orbitSpin {
+      to {
+        transform: rotate(1turn);
+      }
+    }
+
+    @keyframes orbitTilt {
+      50% {
+        transform: rotate(8deg) scale(1.03);
+      }
+    }
+
+    @keyframes blobFloat {
+      50% {
+        transform: translate(8px, -12px) scale(1.06);
+      }
+    }
+
+    @keyframes dialogiReveal {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes speakingSectionReveal {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes stackSlide {
+      50% {
+        transform: translate(9px, -14px) rotate(4deg);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .speaking-poster,
+      .speaking-art::before,
+      .speaking-draw,
+      .speaking-orbit,
+      .speaking-tilt,
+      .speaking-blob,
+      .speaking-stack {
+        animation: none;
+      }
+
+      body.dialogi-open .dialogi-section .dialogi-practice {
+        animation: none;
+      }
+
+      body.speaking-practice-open .speaking-showcase {
+        animation: none;
+      }
+
+      .speaking-poster {
+        transform: none;
+      }
+
+      .speaking-draw {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .speaking-poster {
+        flex-basis: calc(50% - clamp(16px, 2.2vw, 24px));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .learning-hero,
+      .course-grid,
+      .learning-bottom,
+      .prep-hero,
+      .speaking-showcase-header {
+        grid-template-columns: 1fr;
+      }
+
+      .prep-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-section {
+        align-items: start;
+        padding-top: clamp(46px, 8vw, 68px);
+        padding-bottom: clamp(34px, 7vw, 58px);
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-hero {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-hero h1 {
+        font-size: clamp(36px, 8vw, 62px);
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-hero p {
+        font-size: 15px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-badge {
+        width: 108px;
+        padding: 14px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-badge strong {
+        font-size: 30px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-card {
+        min-height: 150px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-card ul {
+        display: none;
+      }
+
+      .dialogi-section {
+        grid-template-columns: 1fr;
+      }
+
+      .lesson-row {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      .lesson-row button {
+        grid-column: 2;
+        width: fit-content;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .prep-grid {
+        grid-template-columns: 1fr;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-shell {
+        gap: 16px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-hero {
+        grid-template-columns: 1fr;
+        padding-bottom: 16px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-badge {
+        display: none;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-card {
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 8px 12px;
+        align-items: start;
+        min-height: 0;
+        padding: 14px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-card-number {
+        grid-row: 1 / 3;
+        width: 36px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-card h2 {
+        font-size: 24px;
+      }
+
+      body.prep-view:not(.speaking-practice-open) .prep-card p {
+        font-size: 14px;
+      }
+
+      .speaking-poster {
+        flex-basis: 100%;
+        min-height: 0;
+      }
+
+      .speaking-art {
+        min-height: 280px;
+      }
+
+      .poster-status {
+        grid-template-columns: 1fr;
+      }
+
+      .dialogi-practice-header,
+      .dialogi-turn {
+        grid-template-columns: 1fr;
+      }
+
+      .dialogi-recorder {
+        grid-column: 1;
+      }
     }
 
     .next-section {
@@ -404,6 +1712,7 @@
       <ul class="menu-list">
         <li><a href="#home">Home</a></li>
         <li><a href="#finnish-for-beginners">Finnish for beginners</a></li>
+        <li><a href="#yki-preparation">YKI Preparation</a></li>
         <li><a href="#podcast">Podcast</a></li>
         <li><a href="blog.html">Blog</a></li>
         <li><a href="about.html">About</a></li>
@@ -426,6 +1735,433 @@
       </a>
     </footer>
   </main>
+  <section class="learning-section" id="finnish-for-beginners" aria-label="Finnish for beginners learning platform">
+    <div class="learning-shell">
+      <div class="learning-hero">
+        <div>
+          <p class="learning-eyebrow">Finnish for beginners</p>
+          <h1>Start learning Finnish with guided courses.</h1>
+          <p>Build from greetings to simple YKI-style answers with short videos, practice prompts, listening tasks, and weekly progress tracking.</p>
+          <div class="learning-actions">
+            <a href="#beginner-curriculum">Start learning</a>
+            <a href="blog.html">Read learner blog</a>
+          </div>
+        </div>
+        <aside class="course-preview" aria-label="Featured beginner course">
+          <div class="preview-screen">
+            <svg viewBox="0 0 320 210" aria-hidden="true">
+              <rect x="24" y="26" width="272" height="158" rx="10" fill="none" stroke="currentColor" stroke-width="8"></rect>
+              <path d="M70 70h106M70 100h172M70 130h132" stroke="currentColor" stroke-width="10" stroke-linecap="round"></path>
+              <circle cx="248" cy="134" r="24" fill="currentColor"></circle>
+            </svg>
+            <span class="play-button" aria-hidden="true">+</span>
+          </div>
+          <div class="preview-meta">
+            <h2>Complete beginner path</h2>
+            <div class="course-stats">
+              <span><strong>24</strong> lessons</span>
+              <span><strong>5h</strong> video</span>
+              <span><strong>A1</strong> level</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+      <ul class="course-tabs" aria-label="Course categories">
+        <li><a class="is-active" href="#finnish-for-beginners">All courses</a></li>
+        <li><a href="#beginner-curriculum">Speaking</a></li>
+        <li><a href="#beginner-curriculum">Listening</a></li>
+        <li><a href="#beginner-curriculum">YKI basics</a></li>
+      </ul>
+      <div class="course-grid" aria-label="Beginner courses">
+        <article class="course-card">
+          <small>Beginner course</small>
+          <h3>Everyday Finnish foundations</h3>
+          <p>Learn greetings, numbers, simple questions, and the phrases needed for daily life in Finland.</p>
+          <div class="progress-track" aria-label="Course progress 35 percent"><span class="progress-fill" style="width: 35%;"></span></div>
+          <footer><span>8 modules</span><span>35% complete</span></footer>
+        </article>
+        <article class="course-card">
+          <small>Speaking practice</small>
+          <h3>Confidence for first conversations</h3>
+          <p>Practice short answers, pronunciation rhythm, and beginner-friendly speaking prompts.</p>
+          <div class="progress-track" aria-label="Course progress 12 percent"><span class="progress-fill" style="width: 12%;"></span></div>
+          <footer><span>6 modules</span><span>12% complete</span></footer>
+        </article>
+        <article class="course-card">
+          <small>YKI basics</small>
+          <h3>Simple answers for test situations</h3>
+          <p>Prepare for everyday YKI themes with guided answer structures and listening habits.</p>
+          <div class="progress-track" aria-label="Course progress 0 percent"><span class="progress-fill" style="width: 0%;"></span></div>
+          <footer><span>10 modules</span><span>Start today</span></footer>
+        </article>
+      </div>
+      <div class="learning-bottom" id="beginner-curriculum">
+        <div class="curriculum" aria-label="Beginner curriculum">
+          <div class="lesson-row">
+            <span class="lesson-number">1</span>
+            <div>
+              <h3>Greetings and first sentences</h3>
+              <p>Video lesson / 12 minutes / practice sheet</p>
+            </div>
+            <button type="button">Preview</button>
+          </div>
+          <div class="lesson-row">
+            <span class="lesson-number">2</span>
+            <div>
+              <h3>Talking about yourself</h3>
+              <p>Speaking prompt / 18 minutes / downloadable script</p>
+            </div>
+            <button type="button">Preview</button>
+          </div>
+          <div class="lesson-row">
+            <span class="lesson-number">3</span>
+            <div>
+              <h3>Shopping, time, and simple questions</h3>
+              <p>Listening task / 15 minutes / mini quiz</p>
+            </div>
+            <button type="button">Preview</button>
+          </div>
+        </div>
+        <aside class="mentor-card" aria-label="Mentor support">
+          <h3>Study with support</h3>
+          <p>Follow a weekly plan, save lessons, and prepare beginner answers for real conversations and future YKI practice.</p>
+          <a href="about.html">About Onrush</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+  <section class="prep-section" id="yki-preparation" aria-label="YKI preparation page">
+    <div class="prep-shell">
+      <div class="prep-hero">
+        <div>
+          <p class="prep-eyebrow">YKI Preparation</p>
+          <h1>Practice every part of the YKI test.</h1>
+          <p>Build a focused study path for the four exam skills with practical tasks, timed prompts, and simple routines for steady progress.</p>
+        </div>
+        <aside class="prep-badge" aria-label="YKI preparation modules">
+          <strong>4</strong>
+          <span>Skill areas</span>
+        </aside>
+      </div>
+      <div class="prep-grid" aria-label="YKI skill areas">
+        <a class="prep-card prep-card-link" href="#speaking-practice">
+          <span class="prep-card-number">1</span>
+          <h2>Speaking</h2>
+          <p>Practice short answers, everyday situations, opinions, and clear speaking structure for timed YKI prompts.</p>
+          <ul>
+            <li>Answer templates</li>
+            <li>Pronunciation rhythm</li>
+            <li>Timed speaking drills</li>
+          </ul>
+        </a>
+        <article class="prep-card">
+          <span class="prep-card-number">2</span>
+          <h2>Reading</h2>
+          <p>Train with messages, notices, short articles, forms, and question types that reward fast scanning.</p>
+          <ul>
+            <li>Main idea practice</li>
+            <li>Keyword scanning</li>
+            <li>Everyday text tasks</li>
+          </ul>
+        </article>
+        <article class="prep-card">
+          <span class="prep-card-number">3</span>
+          <h2>Writing</h2>
+          <p>Build simple emails, opinions, descriptions, and responses with reusable sentence frames.</p>
+          <ul>
+            <li>Email structure</li>
+            <li>Opinion writing</li>
+            <li>Useful connectors</li>
+          </ul>
+        </article>
+        <article class="prep-card">
+          <span class="prep-card-number">4</span>
+          <h2>Listening</h2>
+          <p>Prepare for announcements, conversations, instructions, and choosing the most important information.</p>
+          <ul>
+            <li>Listening habits</li>
+            <li>Context clues</li>
+            <li>Mini comprehension sets</li>
+          </ul>
+        </article>
+      </div>
+      <section class="speaking-showcase" id="speaking-practice" aria-label="Animated speaking practice cards">
+        <div class="speaking-showcase-header">
+          <div>
+            <p class="speaking-kicker">Speaking</p>
+            <h2>Choose a speaking drill.</h2>
+          </div>
+          <p>Four focused YKI speaking formats, shown as animated practice posters for quick scanning and repeated study.</p>
+        </div>
+        <div class="speaking-posters">
+          <section class="dialogi-section" id="dialogi-practice" aria-label="Dialogi section">
+          <a class="speaking-poster poster-dialogi" href="#dialogi-practice" style="--mark: #20b98b;" aria-label="Open Dialogi recording practice">
+            <div class="speaking-art" aria-hidden="true">
+              <svg viewBox="0 0 240 300">
+                <g class="speaking-tilt">
+                  <ellipse class="speaking-line speaking-draw" cx="120" cy="150" rx="76" ry="38" transform="rotate(33 120 150)"></ellipse>
+                  <ellipse class="speaking-line speaking-draw" cx="120" cy="150" rx="76" ry="38" transform="rotate(-33 120 150)"></ellipse>
+                  <ellipse class="speaking-line speaking-draw" cx="120" cy="150" rx="76" ry="38" transform="rotate(90 120 150)"></ellipse>
+                  <circle class="speaking-line speaking-draw" cx="120" cy="150" r="72"></circle>
+                </g>
+                <g class="speaking-orbit is-reverse">
+                  <path class="speaking-line speaking-thin" d="M58 86c38-22 86-22 124 0"></path>
+                  <path class="speaking-line speaking-thin" d="M58 214c38 22 86 22 124 0"></path>
+                  <path class="speaking-line speaking-thin" d="M76 62c28-14 60-14 88 0"></path>
+                  <path class="speaking-line speaking-thin" d="M76 238c28 14 60 14 88 0"></path>
+                </g>
+                <g class="speaking-blob">
+                  <rect x="96" y="126" width="48" height="48" rx="3" fill="#20b98b"></rect>
+                  <circle cx="96" cy="126" r="13" fill="#ffd22e"></circle>
+                  <circle cx="144" cy="126" r="13" fill="#ffd22e"></circle>
+                  <circle cx="96" cy="174" r="13" fill="#ffd22e"></circle>
+                  <circle cx="144" cy="174" r="13" fill="#ffd22e"></circle>
+                </g>
+              </svg>
+            </div>
+            <div class="speaking-poster-body">
+              <span class="poster-mark" aria-hidden="true"></span>
+              <span class="poster-index">001</span>
+              <h3>Dialogi</h3>
+              <p>Practice real-life dialogues at the shop, office, doctor, and service desk. Build fast replies with natural rhythm.</p>
+              <span class="poster-rule" aria-hidden="true"></span>
+              <div class="poster-status">
+                <strong>[.speak]</strong>
+                <span class="poster-slashes" aria-hidden="true"></span>
+              </div>
+              <div class="poster-tools" aria-label="Dialogi practice tools">
+                <span>1m</span><span>Q</span><span>R</span>
+              </div>
+              <footer class="poster-foot"><span>YKI speaking practice</span><span>2026</span></footer>
+            </div>
+          </a>
+          <div class="dialogi-practice" hidden aria-label="Dialogi recording practice">
+            <div class="dialogi-practice-header">
+              <h3>Dialogi</h3>
+              <span>001 / record</span>
+            </div>
+            <p class="dialogi-intro">Aiot järjestää isot juhlat. Tarvitset juhlaa varten tilan ja päätät vuokrata juhlasalin. Keksi, mikä juhla on kyseessä. Sinulle soitetaan juhlapalvelusta, koska olet jättänyt sinne viestin.</p>
+            <div class="dialogi-script">
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+              <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-1" data-seconds="20">
+                <strong>SINÄ:</strong>
+                <span class="dialogi-turn-text">[Esittele itsesi ja kerro asiasi.] (20 sek)</span>
+                <div class="dialogi-recorder">
+                  <button type="button" data-record-dialogi>Record</button>
+                  <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
+                  <button type="button" data-play-dialogi disabled>Replay</button>
+                  <button type="button" data-delete-dialogi disabled>Delete</button>
+                  <span class="dialogi-timer" aria-live="polite">20 sek</span>
+                  <span class="dialogi-save-state" aria-live="polite">No recording</span>
+                  <audio class="dialogi-audio" controls hidden></audio>
+                </div>
+              </div>
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+              <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-2" data-seconds="20">
+                <strong>SINÄ:</strong>
+                <span class="dialogi-turn-text">[Kerro vieraiden lukumäärä ja juhlan ajankohta.] (20 sek)</span>
+                <div class="dialogi-recorder">
+                  <button type="button" data-record-dialogi>Record</button>
+                  <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
+                  <button type="button" data-play-dialogi disabled>Replay</button>
+                  <button type="button" data-delete-dialogi disabled>Delete</button>
+                  <span class="dialogi-timer" aria-live="polite">20 sek</span>
+                  <span class="dialogi-save-state" aria-live="polite">No recording</span>
+                  <audio class="dialogi-audio" controls hidden></audio>
+                </div>
+              </div>
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+              <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-3" data-seconds="10">
+                <strong>SINÄ:</strong>
+                <span class="dialogi-turn-text">[Vastaa.] (10 sek)</span>
+                <div class="dialogi-recorder">
+                  <button type="button" data-record-dialogi>Record</button>
+                  <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
+                  <button type="button" data-play-dialogi disabled>Replay</button>
+                  <button type="button" data-delete-dialogi disabled>Delete</button>
+                  <span class="dialogi-timer" aria-live="polite">10 sek</span>
+                  <span class="dialogi-save-state" aria-live="polite">No recording</span>
+                  <audio class="dialogi-audio" controls hidden></audio>
+                </div>
+              </div>
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+              <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-4" data-seconds="15">
+                <strong>SINÄ:</strong>
+                <span class="dialogi-turn-text">[Vastaa.] (15 sek)</span>
+                <div class="dialogi-recorder">
+                  <button type="button" data-record-dialogi>Record</button>
+                  <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
+                  <button type="button" data-play-dialogi disabled>Replay</button>
+                  <button type="button" data-delete-dialogi disabled>Delete</button>
+                  <span class="dialogi-timer" aria-live="polite">15 sek</span>
+                  <span class="dialogi-save-state" aria-live="polite">No recording</span>
+                  <audio class="dialogi-audio" controls hidden></audio>
+                </div>
+              </div>
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+              <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-5" data-seconds="20">
+                <strong>SINÄ:</strong>
+                <span class="dialogi-turn-text">[Kysy jotakin tarkemmin ruokailusta.] (20 sek)</span>
+                <div class="dialogi-recorder">
+                  <button type="button" data-record-dialogi>Record</button>
+                  <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
+                  <button type="button" data-play-dialogi disabled>Replay</button>
+                  <button type="button" data-delete-dialogi disabled>Delete</button>
+                  <span class="dialogi-timer" aria-live="polite">20 sek</span>
+                  <span class="dialogi-save-state" aria-live="polite">No recording</span>
+                  <audio class="dialogi-audio" controls hidden></audio>
+                </div>
+              </div>
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+              <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-6" data-seconds="10">
+                <strong>SINÄ:</strong>
+                <span class="dialogi-turn-text">[Kysy hintaa.] (10 sek)</span>
+                <div class="dialogi-recorder">
+                  <button type="button" data-record-dialogi>Record</button>
+                  <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
+                  <button type="button" data-play-dialogi disabled>Replay</button>
+                  <button type="button" data-delete-dialogi disabled>Delete</button>
+                  <span class="dialogi-timer" aria-live="polite">10 sek</span>
+                  <span class="dialogi-save-state" aria-live="polite">No recording</span>
+                  <audio class="dialogi-audio" controls hidden></audio>
+                </div>
+              </div>
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+              <div class="dialogi-turn dialogi-you" data-dialogi-turn="dialogi-7" data-seconds="10">
+                <strong>SINÄ:</strong>
+                <span class="dialogi-turn-text">[Lopeta puhelu.] (10 sek)</span>
+                <div class="dialogi-recorder">
+                  <button type="button" data-record-dialogi>Record</button>
+                  <button type="button" data-stop-dialogi disabled>Stop &amp; save</button>
+                  <button type="button" data-play-dialogi disabled>Replay</button>
+                  <button type="button" data-delete-dialogi disabled>Delete</button>
+                  <span class="dialogi-timer" aria-live="polite">10 sek</span>
+                  <span class="dialogi-save-state" aria-live="polite">No recording</span>
+                  <audio class="dialogi-audio" controls hidden></audio>
+                </div>
+              </div>
+              <div class="dialogi-turn dialogi-man">
+                <strong>Mies:</strong>
+                <span class="dialogi-turn-text">*****</span>
+              </div>
+            </div>
+          </div>
+          </section>
+          <article class="speaking-poster poster-tilanne" style="--mark: #ffd22e;">
+            <div class="speaking-art" aria-hidden="true">
+              <svg viewBox="0 0 240 300">
+                <g class="speaking-orbit">
+                  <circle class="speaking-line speaking-draw" cx="75" cy="88" r="42"></circle>
+                  <circle class="speaking-line speaking-draw" cx="120" cy="88" r="42"></circle>
+                  <circle class="speaking-line speaking-draw" cx="165" cy="88" r="42"></circle>
+                  <circle class="speaking-line speaking-draw" cx="75" cy="150" r="42"></circle>
+                  <circle class="speaking-line speaking-draw" cx="120" cy="150" r="42"></circle>
+                  <circle class="speaking-line speaking-draw" cx="165" cy="150" r="42"></circle>
+                  <circle class="speaking-line speaking-draw" cx="75" cy="212" r="42"></circle>
+                  <circle class="speaking-line speaking-draw" cx="120" cy="212" r="42"></circle>
+                  <circle class="speaking-line speaking-draw" cx="165" cy="212" r="42"></circle>
+                </g>
+                <circle class="speaking-blob" cx="90" cy="92" r="32" fill="#ff5a25"></circle>
+                <circle class="speaking-blob is-slow" cx="120" cy="145" r="46" fill="#ff5a25"></circle>
+                <circle class="speaking-blob" cx="170" cy="220" r="28" fill="#aab0ff" opacity="0.82"></circle>
+              </svg>
+            </div>
+            <div class="speaking-poster-body">
+              <span class="poster-mark" aria-hidden="true"></span>
+              <span class="poster-index">002</span>
+              <h3>Tilanne</h3>
+              <p>Handle everyday situations: asking for help, complaining politely, leaving a message, and reacting in Finnish.</p>
+              <span class="poster-rule" aria-hidden="true"></span>
+              <div class="poster-status">
+                <strong>[.ready]</strong>
+                <span class="poster-slashes" aria-hidden="true"></span>
+              </div>
+              <div class="poster-tools" aria-label="Tilanne practice tools">
+                <span>!</span><span>2m</span>
+              </div>
+              <footer class="poster-foot"><span>YKI speaking practice</span><span>2026</span></footer>
+            </div>
+          </article>
+          <article class="speaking-poster poster-kertominen" style="--mark: #ff5a25;">
+            <div class="speaking-art" aria-hidden="true">
+              <svg viewBox="0 0 240 300">
+                <circle class="speaking-line speaking-draw" cx="120" cy="102" r="72"></circle>
+                <circle class="speaking-line speaking-draw" cx="120" cy="198" r="72"></circle>
+                <ellipse class="speaking-blob" cx="120" cy="150" rx="56" ry="14" fill="#4354e8" opacity="0.72"></ellipse>
+                <path class="speaking-line speaking-thin speaking-orbit" d="M54 150c32-20 100-20 132 0"></path>
+              </svg>
+            </div>
+            <div class="speaking-poster-body">
+              <span class="poster-mark" aria-hidden="true"></span>
+              <span class="poster-index">003</span>
+              <h3>Kertominen</h3>
+              <p>Tell a structured story about an important person, daily life, hobbies, trips, memories, and personal experience.</p>
+              <span class="poster-rule" aria-hidden="true"></span>
+              <div class="poster-status">
+                <strong>[.build]</strong>
+                <span class="poster-slashes" aria-hidden="true"></span>
+              </div>
+              <div class="poster-tools" aria-label="Kertominen practice tools">
+                <span>90s</span><span>N</span><span>S</span><span>M</span>
+              </div>
+              <footer class="poster-foot"><span>YKI speaking practice</span><span>2026</span></footer>
+            </div>
+          </article>
+          <article class="speaking-poster poster-mielipide" style="--mark: #676767;">
+            <div class="speaking-art" aria-hidden="true">
+              <svg viewBox="0 0 240 300">
+                <g class="speaking-stack">
+                  <ellipse class="speaking-line speaking-draw" cx="120" cy="150" rx="48" ry="92" transform="rotate(34 120 150)"></ellipse>
+                  <ellipse class="speaking-line speaking-draw" cx="120" cy="150" rx="48" ry="92" transform="rotate(44 120 150)"></ellipse>
+                  <ellipse class="speaking-line speaking-draw" cx="120" cy="150" rx="48" ry="92" transform="rotate(54 120 150)"></ellipse>
+                  <ellipse class="speaking-line speaking-draw" cx="120" cy="150" rx="48" ry="92" transform="rotate(64 120 150)"></ellipse>
+                  <ellipse class="speaking-line speaking-draw" cx="120" cy="150" rx="48" ry="92" transform="rotate(74 120 150)"></ellipse>
+                  <ellipse class="speaking-line speaking-draw" cx="120" cy="150" rx="48" ry="92" transform="rotate(84 120 150)"></ellipse>
+                  <ellipse class="speaking-line speaking-draw" cx="120" cy="150" rx="48" ry="92" transform="rotate(94 120 150)"></ellipse>
+                </g>
+              </svg>
+            </div>
+            <div class="speaking-poster-body">
+              <span class="poster-mark" aria-hidden="true"></span>
+              <span class="poster-index">004</span>
+              <h3>Mielipide</h3>
+              <p>Give your opinion on school, work, technology, environment, and everyday choices with clear reasons.</p>
+              <span class="poster-rule" aria-hidden="true"></span>
+              <div class="poster-status">
+                <strong>[.argue]</strong>
+                <span class="poster-slashes" aria-hidden="true"></span>
+              </div>
+              <div class="poster-tools" aria-label="Mielipide practice tools">
+                <span>+</span>
+              </div>
+              <footer class="poster-foot"><span>YKI speaking practice</span><span>2026</span></footer>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+  </section>
   <section class="next-section" id="next-section" tabindex="-1" aria-label="YKI registration details">
     <div class="next-section-inner">
       <h1>YKI Exam</h1>
@@ -444,20 +2180,29 @@
     const menuButton = document.querySelector(".menu-button");
     const menuLinks = document.querySelectorAll(".menu-list a");
     const scrollCta = document.querySelector(".scroll-cta");
+    const learningSection = document.querySelector("#finnish-for-beginners");
+    const prepSection = document.querySelector("#yki-preparation");
     const scrollCtaRing = document.querySelector(".scroll-cta-ring");
-    const nextSection = document.querySelector("#next-section");
+    const nextSection = learningSection || document.querySelector("#next-section");
     const footerBanner = document.querySelector(".footer-banner");
+    const dialogiPoster = document.querySelector(".poster-dialogi");
+    const dialogiPractice = document.querySelector(".dialogi-section > .dialogi-practice");
+    const dialogiTurns = document.querySelectorAll("[data-dialogi-turn]");
     const skipLoader = new URLSearchParams(window.location.search).get("skipLoader") === "1";
     const startTime = Date.now();
     let timerId = null;
     let finishId = null;
     let menuFlowId = null;
+    let initialHashHandled = false;
+    let dialogiDbPromise = null;
+    let activeDialogiRecording = null;
 
     function paint(progress) {
       const percentage = Math.min(100, Math.round(progress * 100));
       const fill = `${(progress * 100).toFixed(3)}%`;
       root.style.setProperty("--fill", fill);
       root.style.setProperty("--scale", progress.toFixed(4));
+      root.classList.toggle("is-loaded", progress === 1);
       body.classList.toggle("is-loaded", progress === 1);
       percentValues.forEach((value) => {
         value.textContent = percentage;
@@ -471,6 +2216,7 @@
       if (progress < 1) {
         timerId = window.setTimeout(tick, frameDelay);
       } else {
+        scrollToInitialHash("auto");
         timerId = null;
         finishId = null;
       }
@@ -484,6 +2230,7 @@
           window.clearTimeout(timerId);
         }
         paint(1);
+        scrollToInitialHash("auto");
         timerId = null;
         finishId = null;
       }, duration);
@@ -570,6 +2317,396 @@
       menuButton.setAttribute("aria-expanded", String(open));
     }
 
+    function openDialogiDb() {
+      if (!("indexedDB" in window)) {
+        return Promise.reject(new Error("IndexedDB is not available"));
+      }
+
+      if (!dialogiDbPromise) {
+        dialogiDbPromise = new Promise((resolve, reject) => {
+          const request = indexedDB.open("yki-dialogi-recordings", 1);
+
+          request.addEventListener("upgradeneeded", () => {
+            const db = request.result;
+            if (!db.objectStoreNames.contains("recordings")) {
+              db.createObjectStore("recordings", { keyPath: "id" });
+            }
+          });
+
+          request.addEventListener("success", () => resolve(request.result));
+          request.addEventListener("error", () => reject(request.error));
+        });
+      }
+
+      return dialogiDbPromise;
+    }
+
+    async function getDialogiRecording(id) {
+      try {
+        const db = await openDialogiDb();
+
+        return await new Promise((resolve, reject) => {
+          const transaction = db.transaction("recordings", "readonly");
+          const request = transaction.objectStore("recordings").get(id);
+
+          request.addEventListener("success", () => resolve(request.result || null));
+          request.addEventListener("error", () => reject(request.error));
+        });
+      } catch (error) {
+        return getDialogiRecordingFallback(id);
+      }
+    }
+
+    async function saveDialogiRecording(id, blob) {
+      try {
+        const db = await openDialogiDb();
+
+        await new Promise((resolve, reject) => {
+          const transaction = db.transaction("recordings", "readwrite");
+          const request = transaction.objectStore("recordings").put({
+            id,
+            blob,
+            mimeType: blob.type,
+            updatedAt: Date.now(),
+          });
+
+          request.addEventListener("success", () => resolve());
+          request.addEventListener("error", () => reject(request.error));
+        });
+
+        return;
+      } catch (error) {
+        await saveDialogiRecordingFallback(id, blob);
+      }
+    }
+
+    async function deleteDialogiRecording(id) {
+      try {
+        const db = await openDialogiDb();
+
+        await new Promise((resolve, reject) => {
+          const transaction = db.transaction("recordings", "readwrite");
+          const request = transaction.objectStore("recordings").delete(id);
+
+          request.addEventListener("success", () => resolve());
+          request.addEventListener("error", () => reject(request.error));
+        });
+      } catch (error) {
+        window.localStorage?.removeItem(`yki-dialogi-recording:${id}`);
+      }
+    }
+
+    function blobToDataUrl(blob) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.addEventListener("load", () => resolve(reader.result));
+        reader.addEventListener("error", () => reject(reader.error));
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    function dataUrlToBlob(dataUrl) {
+      const [header, payload] = dataUrl.split(",");
+      const mimeType = header.match(/data:(.*);base64/)?.[1] || "audio/webm";
+      const binary = atob(payload);
+      const bytes = new Uint8Array(binary.length);
+
+      for (let index = 0; index < binary.length; index += 1) {
+        bytes[index] = binary.charCodeAt(index);
+      }
+
+      return new Blob([bytes], { type: mimeType });
+    }
+
+    async function saveDialogiRecordingFallback(id, blob) {
+      const dataUrl = await blobToDataUrl(blob);
+
+      window.localStorage.setItem(`yki-dialogi-recording:${id}`, JSON.stringify({
+        dataUrl,
+        id,
+        mimeType: blob.type,
+        updatedAt: Date.now(),
+      }));
+    }
+
+    function getDialogiRecordingFallback(id) {
+      const stored = window.localStorage?.getItem(`yki-dialogi-recording:${id}`);
+
+      if (!stored) {
+        return null;
+      }
+
+      const recording = JSON.parse(stored);
+
+      return {
+        blob: dataUrlToBlob(recording.dataUrl),
+        id,
+        mimeType: recording.mimeType,
+        updatedAt: recording.updatedAt,
+      };
+    }
+
+    function getDialogiControls(turn) {
+      return {
+        audio: turn.querySelector(".dialogi-audio"),
+        deleteButton: turn.querySelector("[data-delete-dialogi]"),
+        playButton: turn.querySelector("[data-play-dialogi]"),
+        recordButton: turn.querySelector("[data-record-dialogi]"),
+        state: turn.querySelector(".dialogi-save-state"),
+        stopButton: turn.querySelector("[data-stop-dialogi]"),
+        timer: turn.querySelector(".dialogi-timer"),
+      };
+    }
+
+    function setDialogiAudio(turn, blob) {
+      const controls = getDialogiControls(turn);
+
+      if (controls.audio.dataset.objectUrl) {
+        URL.revokeObjectURL(controls.audio.dataset.objectUrl);
+      }
+
+      const objectUrl = URL.createObjectURL(blob);
+      controls.audio.src = objectUrl;
+      controls.audio.dataset.objectUrl = objectUrl;
+      controls.audio.hidden = false;
+      controls.playButton.disabled = false;
+      controls.deleteButton.disabled = false;
+      controls.state.textContent = "Saved";
+    }
+
+    function clearDialogiAudio(turn, stateText = "No recording") {
+      const controls = getDialogiControls(turn);
+
+      if (controls.audio.dataset.objectUrl) {
+        URL.revokeObjectURL(controls.audio.dataset.objectUrl);
+      }
+
+      controls.audio.removeAttribute("src");
+      controls.audio.removeAttribute("data-object-url");
+      controls.audio.hidden = true;
+      controls.audio.load();
+      controls.playButton.disabled = true;
+      controls.deleteButton.disabled = true;
+      controls.state.textContent = stateText;
+    }
+
+    function setDialogiRecordingState(turn, recording) {
+      const controls = getDialogiControls(turn);
+      const hasAudio = !controls.audio.hidden && Boolean(controls.audio.src);
+
+      controls.recordButton.disabled = recording;
+      controls.stopButton.disabled = !recording;
+      controls.playButton.disabled = recording || !hasAudio;
+      controls.deleteButton.disabled = recording || !hasAudio;
+    }
+
+    function stopActiveDialogiRecording() {
+      if (!activeDialogiRecording || activeDialogiRecording.recorder.state === "inactive") {
+        return;
+      }
+
+      activeDialogiRecording.recorder.stop();
+    }
+
+    async function startDialogiRecording(turn) {
+      const controls = getDialogiControls(turn);
+      const seconds = Number(turn.dataset.seconds || 10);
+
+      if (activeDialogiRecording) {
+        controls.state.textContent = "Stop current recording first";
+        return;
+      }
+
+      if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
+        controls.state.textContent = "Recording is not supported";
+        return;
+      }
+
+      let stream;
+
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      } catch (error) {
+        controls.state.textContent = "Microphone permission needed";
+        return;
+      }
+
+      const chunks = [];
+      const recorder = new MediaRecorder(stream);
+      const startedAt = Date.now();
+
+      activeDialogiRecording = {
+        chunks,
+        recorder,
+        seconds,
+        stream,
+        timerId: null,
+        turn,
+      };
+
+      function updateTimer() {
+        const elapsed = (Date.now() - startedAt) / 1000;
+        const remaining = Math.max(0, Math.ceil(seconds - elapsed));
+
+        controls.timer.textContent = `${remaining} sek`;
+
+        if (remaining <= 0) {
+          stopActiveDialogiRecording();
+        }
+      }
+
+      recorder.addEventListener("dataavailable", (event) => {
+        if (event.data.size > 0) {
+          chunks.push(event.data);
+        }
+      });
+
+      recorder.addEventListener("stop", async () => {
+        window.clearInterval(activeDialogiRecording?.timerId);
+        stream.getTracks().forEach((track) => track.stop());
+
+        const blob = new Blob(chunks, { type: recorder.mimeType || "audio/webm" });
+
+        try {
+          if (blob.size > 0) {
+            await saveDialogiRecording(turn.dataset.dialogiTurn, blob);
+            setDialogiAudio(turn, blob);
+          } else {
+            controls.state.textContent = "No audio captured";
+          }
+        } catch (error) {
+          controls.state.textContent = "Could not save";
+        }
+
+        controls.timer.textContent = `${seconds} sek`;
+        activeDialogiRecording = null;
+        setDialogiRecordingState(turn, false);
+      });
+
+      recorder.start();
+      controls.state.textContent = "Recording...";
+      controls.timer.textContent = `${seconds} sek`;
+      setDialogiRecordingState(turn, true);
+      updateTimer();
+      activeDialogiRecording.timerId = window.setInterval(updateTimer, 250);
+    }
+
+    async function hydrateDialogiRecordings() {
+      if (dialogiTurns.length === 0) {
+        return;
+      }
+
+      await Promise.all(Array.from(dialogiTurns).map(async (turn) => {
+        const controls = getDialogiControls(turn);
+        controls.timer.textContent = `${turn.dataset.seconds} sek`;
+
+        try {
+          const recording = await getDialogiRecording(turn.dataset.dialogiTurn);
+
+          if (recording?.blob) {
+            setDialogiAudio(turn, recording.blob);
+          } else {
+            clearDialogiAudio(turn);
+          }
+        } catch (error) {
+          controls.state.textContent = "Local save unavailable";
+        }
+      }));
+    }
+
+    function scrollToTarget(target, behavior = "smooth") {
+      if (prepSection && (target === prepSection || prepSection.contains(target)) && body.classList.contains("prep-view")) {
+        const fixedTopOffset = target === prepSection ? 0 : menuButton.offsetHeight + 28;
+        const top = Math.max(0, target.offsetTop - fixedTopOffset);
+
+        if (behavior === "auto") {
+          prepSection.scrollTop = top;
+        } else {
+          prepSection.scrollTo({ top, behavior });
+        }
+
+        return;
+      }
+
+      const top = target.getBoundingClientRect().top + window.scrollY;
+      const scrollRoot = document.scrollingElement || document.documentElement;
+
+      if (behavior === "auto") {
+        scrollRoot.scrollTop = top;
+        window.scrollTo(0, top);
+        return;
+      }
+
+      window.scrollTo({ top, behavior });
+    }
+
+    function setActiveView(view) {
+      const learningOpen = view === "learning";
+      const prepOpen = view === "prep";
+
+      body.classList.toggle("learning-view", learningOpen);
+      root.classList.toggle("learning-view", learningOpen);
+      body.classList.toggle("prep-view", prepOpen);
+      root.classList.toggle("prep-view", prepOpen);
+    }
+
+    function setDialogiPracticeOpen(open) {
+      body.classList.toggle("dialogi-open", open);
+      root.classList.toggle("dialogi-open", open);
+
+      if (dialogiPractice) {
+        dialogiPractice.hidden = !open;
+      }
+    }
+
+    function setSpeakingPracticeOpen(open) {
+      body.classList.toggle("speaking-practice-open", open);
+      root.classList.toggle("speaking-practice-open", open);
+    }
+
+    function syncLearningViewFromHash() {
+      const hash = window.location.hash;
+
+      if (hash === "#finnish-for-beginners") {
+        setActiveView("learning");
+      } else if (hash === "#yki-preparation" || hash === "#speaking-practice" || hash === "#dialogi-practice") {
+        setActiveView("prep");
+      } else {
+        setActiveView("");
+      }
+
+      setSpeakingPracticeOpen(hash === "#speaking-practice" || hash === "#dialogi-practice");
+      setDialogiPracticeOpen(hash === "#dialogi-practice");
+    }
+
+    function getCurrentHashTarget() {
+      const hash = window.location.hash.slice(1);
+      return hash && hash !== "home" ? document.getElementById(hash) : null;
+    }
+
+    function scrollCurrentHash(behavior = "auto") {
+      const target = getCurrentHashTarget();
+
+      if (!target) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => scrollToTarget(target, behavior));
+      window.setTimeout(() => scrollToTarget(target, behavior), 160);
+      window.setTimeout(() => scrollToTarget(target, behavior), 420);
+    }
+
+    function scrollToInitialHash(behavior = "auto") {
+      if (initialHashHandled) {
+        return;
+      }
+
+      initialHashHandled = true;
+      syncLearningViewFromHash();
+      scrollCurrentHash(behavior);
+    }
+
     menuButton.addEventListener("click", () => {
       const menuIsOpen = !body.classList.contains("menu-open");
 
@@ -579,24 +2716,106 @@
 
     menuLinks.forEach((link) => {
       link.addEventListener("click", (event) => {
-        const href = link.getAttribute("href");
-        const target = href ? document.querySelector(href) : null;
+        const href = link.getAttribute("href") || "";
+        const menuWasOpen = body.classList.contains("menu-open");
+        const opensLearning = href === "#finnish-for-beginners";
+        const opensPrep = href === "#yki-preparation";
+        const opensHome = href === "#home";
 
-        if (target) {
+        if (opensLearning || opensPrep || opensHome) {
           event.preventDefault();
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-          window.history.pushState(null, "", href);
         }
 
-        if (body.classList.contains("menu-open")) {
+        if (menuWasOpen) {
           animateMenu(false);
           setMenuButtonState(false);
+        }
+
+        if (opensLearning || opensPrep || opensHome) {
+          window.setTimeout(() => {
+            window.history.pushState(null, "", href);
+            syncLearningViewFromHash();
+            scrollCurrentHash("auto");
+          }, menuWasOpen ? menuFlowDuration + 40 : 0);
         }
       });
     });
 
+    if (dialogiPoster) {
+      function openDialogiPractice() {
+        const target = document.querySelector("#dialogi-practice");
+
+        if (!target) {
+          return;
+        }
+
+        window.history.pushState(null, "", "#dialogi-practice");
+        syncLearningViewFromHash();
+        window.setTimeout(() => scrollToTarget(target, "auto"), 0);
+      }
+
+      dialogiPoster.addEventListener("click", (event) => {
+        event.preventDefault();
+        openDialogiPractice();
+      });
+
+      dialogiPoster.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openDialogiPractice();
+        }
+      });
+    }
+
+    dialogiTurns.forEach((turn) => {
+      const controls = getDialogiControls(turn);
+
+      controls.recordButton.addEventListener("click", () => {
+        startDialogiRecording(turn);
+      });
+
+      controls.stopButton.addEventListener("click", () => {
+        stopActiveDialogiRecording();
+      });
+
+      controls.playButton.addEventListener("click", async () => {
+        controls.audio.currentTime = 0;
+
+        try {
+          await controls.audio.play();
+        } catch (error) {
+          controls.state.textContent = "Replay unavailable";
+        }
+      });
+
+      controls.deleteButton.addEventListener("click", async () => {
+        try {
+          await deleteDialogiRecording(turn.dataset.dialogiTurn);
+          clearDialogiAudio(turn, "Deleted");
+        } catch (error) {
+          controls.state.textContent = "Could not delete";
+        }
+      });
+    });
+
+    window.addEventListener("hashchange", () => {
+      syncLearningViewFromHash();
+      scrollCurrentHash("smooth");
+    });
+
+    window.addEventListener("load", () => {
+      window.setTimeout(() => {
+        syncLearningViewFromHash();
+      }, duration + 700);
+    });
+
     scrollCta.addEventListener("click", () => {
-      nextSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (nextSection.id) {
+        window.history.pushState(null, "", `#${nextSection.id}`);
+        syncLearningViewFromHash();
+      } else {
+        scrollToTarget(nextSection);
+      }
     });
 
     footerBanner.addEventListener("pointerenter", () => {
@@ -616,9 +2835,14 @@
     });
 
     buildScrollCtaRing();
+    hydrateDialogiRecordings();
+
     if (skipLoader) {
       paint(1);
-      window.history.replaceState(null, "", "index.html#home");
+      scrollToInitialHash("auto");
+      if (!window.location.hash || window.location.hash === "#home") {
+        window.history.replaceState(null, "", "index.html#home");
+      }
     } else {
       start();
     }

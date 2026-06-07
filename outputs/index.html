@@ -206,6 +206,7 @@
       font-weight: 800;
       letter-spacing: 0;
       line-height: 1.12;
+      overflow-wrap: anywhere;
       text-decoration: none;
     }
 
@@ -404,6 +405,7 @@
 
     body.learning-view .scroll-cta,
     body.prep-view .scroll-cta {
+      display: none;
       opacity: 0;
       pointer-events: none;
     }
@@ -412,6 +414,7 @@
       display: grid;
       gap: clamp(34px, 6vw, 72px);
       width: min(1180px, 100%);
+      min-width: 0;
       margin: 0 auto;
     }
 
@@ -420,6 +423,7 @@
       grid-template-columns: minmax(0, 1fr) minmax(280px, 440px);
       gap: clamp(28px, 5vw, 64px);
       align-items: stretch;
+      min-width: 0;
     }
 
     .learning-eyebrow {
@@ -584,6 +588,7 @@
     .course-card {
       display: grid;
       gap: 18px;
+      min-width: 0;
       min-height: 310px;
       border: 1px solid rgba(22, 19, 19, 0.16);
       border-radius: 8px;
@@ -604,6 +609,7 @@
       font-size: clamp(25px, 3.3vw, 40px);
       font-weight: 930;
       line-height: 0.98;
+      overflow-wrap: anywhere;
     }
 
     .course-card p {
@@ -612,6 +618,7 @@
       font-size: clamp(15px, 2vw, 18px);
       font-weight: 650;
       line-height: 1.35;
+      overflow-wrap: anywhere;
     }
 
     .progress-track {
@@ -657,6 +664,7 @@
       grid-template-columns: auto minmax(0, 1fr) auto;
       gap: 18px;
       align-items: center;
+      min-width: 0;
       padding: clamp(18px, 3vw, 24px);
       border-bottom: 1px solid rgba(22, 19, 19, 0.12);
     }
@@ -738,6 +746,7 @@
       display: grid;
       gap: clamp(34px, 6vw, 68px);
       width: min(1180px, 100%);
+      min-width: 0;
       margin: 0 auto;
     }
 
@@ -806,6 +815,7 @@
     .prep-card {
       display: grid;
       gap: 18px;
+      min-width: 0;
       min-height: 360px;
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 8px;
@@ -830,6 +840,7 @@
       font-size: clamp(28px, 4vw, 44px);
       font-weight: 940;
       line-height: 0.94;
+      overflow-wrap: anywhere;
     }
 
     .prep-card p {
@@ -838,6 +849,7 @@
       font-size: clamp(15px, 2vw, 18px);
       font-weight: 650;
       line-height: 1.35;
+      overflow-wrap: anywhere;
     }
 
     .prep-card ul {
@@ -946,6 +958,7 @@
     .speaking-showcase {
       display: grid;
       gap: clamp(22px, 4vw, 38px);
+      min-width: 0;
       border-top: 1px solid rgba(255, 255, 255, 0.2);
       padding-top: clamp(30px, 6vw, 58px);
     }
@@ -1007,26 +1020,26 @@
     }
 
     .speaking-posters {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: clamp(16px, 2.2vw, 24px);
       align-items: stretch;
+      min-width: 0;
     }
 
     .dialogi-section {
-      display: flex;
-      flex: 1 1 250px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
       min-width: 0;
     }
 
     .dialogi-section .speaking-poster {
-      flex: 1 1 250px;
       width: 100%;
     }
 
     body.dialogi-open .dialogi-section {
       display: grid;
-      flex: 1 1 100%;
+      grid-column: 1 / -1;
       grid-template-columns: minmax(250px, 0.34fr) minmax(0, 1fr);
       gap: clamp(16px, 2.2vw, 24px);
       align-items: stretch;
@@ -1039,7 +1052,6 @@
 
     .speaking-poster {
       display: grid;
-      flex: 1 1 250px;
       grid-template-rows: auto 1fr;
       min-width: 0;
       min-height: min(720px, 100%);
@@ -1081,6 +1093,8 @@
     .speaking-art {
       position: relative;
       display: grid;
+      width: 100%;
+      max-width: 100%;
       min-height: clamp(220px, 28vw, 360px);
       aspect-ratio: 1 / 1;
       place-items: center;
@@ -1321,6 +1335,7 @@
     .dialogi-practice {
       display: none;
       gap: clamp(18px, 3vw, 28px);
+      min-width: 0;
       border: 1px solid rgba(255, 255, 255, 0.16);
       border-radius: 8px;
       background: #f8f8f4;
@@ -1455,6 +1470,7 @@
 
     .dialogi-recorder button {
       min-height: 38px;
+      min-width: 0;
       border: 1px solid #101312;
       border-radius: 999px;
       background: #101312;
@@ -1463,6 +1479,8 @@
       font: inherit;
       font-size: 13px;
       font-weight: 900;
+      line-height: 1.05;
+      overflow-wrap: anywhere;
       padding: 0 14px;
     }
 
@@ -1688,8 +1706,8 @@
     }
 
     @media (max-width: 1100px) {
-      .speaking-poster {
-        flex-basis: calc(50% - clamp(16px, 2.2vw, 24px));
+      .speaking-posters {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
@@ -1747,6 +1765,7 @@
       }
 
       body.dialogi-open .dialogi-section .speaking-poster {
+        width: 100%;
         min-height: 0;
       }
 
@@ -1875,8 +1894,11 @@
       }
 
       .speaking-poster {
-        flex-basis: 100%;
         min-height: 0;
+      }
+
+      .speaking-posters {
+        grid-template-columns: 1fr;
       }
 
       .speaking-showcase {
@@ -1941,13 +1963,26 @@
         padding: 14px;
       }
 
+      .dialogi-you {
+        box-shadow: 4px 4px 0 rgba(20, 61, 45, 0.14);
+      }
+
       .dialogi-recorder {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         grid-column: 1;
       }
 
       .dialogi-recorder button {
-        flex: 1 1 132px;
-        min-width: min(100%, 132px);
+        width: 100%;
+        min-height: 42px;
+        padding: 0 10px;
+      }
+
+      .dialogi-timer,
+      .dialogi-save-state,
+      .dialogi-audio {
+        grid-column: 1 / -1;
       }
 
       .dialogi-audio {
@@ -1982,7 +2017,11 @@
       }
 
       .dialogi-recorder button {
-        flex-basis: 100%;
+        min-height: 44px;
+      }
+
+      .dialogi-recorder {
+        grid-template-columns: 1fr;
       }
     }
 

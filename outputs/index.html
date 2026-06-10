@@ -107,6 +107,155 @@
       font-weight: 700;
     }
 
+    .weather-dashboard {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      width: min(420px, calc(100vw - (max(var(--edge), env(safe-area-inset-left)) * 2)));
+      justify-items: center;
+      gap: 38px;
+      color: #fff;
+      opacity: 0;
+      pointer-events: none;
+      text-align: center;
+      transform: translateY(18px) scale(0.98);
+      transition: opacity 420ms ease 140ms, transform 420ms cubic-bezier(0.21, 0.8, 0.24, 1) 140ms;
+    }
+
+    body.is-loaded .weather-dashboard {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .weather-heading {
+      display: grid;
+      gap: 4px;
+      text-transform: uppercase;
+    }
+
+    .weather-city {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: 1;
+      text-shadow: 0 0 22px rgba(255, 255, 255, 0.16);
+    }
+
+    .weather-condition {
+      margin: 0;
+      color: #9a9a9a;
+      font-size: 17px;
+      font-weight: 850;
+      letter-spacing: 0;
+      line-height: 1.1;
+      text-shadow: 0 0 18px rgba(255, 255, 255, 0.1);
+    }
+
+    .weather-icon {
+      width: min(260px, 72vw);
+      overflow: visible;
+      color: #fff;
+      filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.12));
+    }
+
+    .weather-cloud-group {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: weatherCloudFloat 5.8s ease-in-out infinite;
+    }
+
+    .weather-cloud {
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 12;
+    }
+
+    .weather-rain {
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-width: 8;
+      animation: weatherRainFall 1.35s ease-in-out infinite;
+    }
+
+    .weather-rain:nth-of-type(2) {
+      animation-delay: 180ms;
+    }
+
+    .weather-rain:nth-of-type(3) {
+      animation-delay: 360ms;
+    }
+
+    .weather-rain:nth-of-type(4) {
+      animation-delay: 90ms;
+    }
+
+    .weather-readout {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 16px;
+      color: #7e7e7e;
+      font-size: 22px;
+      font-weight: 850;
+      line-height: 1;
+      text-shadow: 0 0 18px rgba(255, 255, 255, 0.08);
+    }
+
+    .weather-current {
+      color: #fff;
+      font-size: 36px;
+      font-weight: 950;
+    }
+
+    .weather-separator {
+      color: #303030;
+    }
+
+    .weather-wind {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: -22px 0 0;
+      color: #7e7e7e;
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .weather-wind svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+      opacity: 0.72;
+    }
+
+    .weather-location-button {
+      min-height: 38px;
+      margin-top: -20px;
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      border-radius: 999px;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: 0;
+      padding: 0 18px;
+      transition: border-color 180ms ease, transform 180ms ease;
+    }
+
+    .weather-location-button:hover,
+    .weather-location-button:focus-visible {
+      border-color: #fff;
+      outline: 0;
+      transform: translateY(-1px);
+    }
+
     .menu-button {
       position: fixed;
       top: max(var(--edge), env(safe-area-inset-top));
@@ -1688,6 +1837,11 @@
         animation: none;
       }
 
+      .weather-cloud-group,
+      .weather-rain {
+        animation: none;
+      }
+
       body.dialogi-open .dialogi-section .dialogi-practice {
         animation: none;
       }
@@ -1807,6 +1961,40 @@
 
       .footer-banner {
         padding: 10px 0;
+      }
+
+      .weather-dashboard {
+        gap: 30px;
+      }
+
+      .weather-city {
+        font-size: 28px;
+      }
+
+      .weather-condition {
+        font-size: 15px;
+      }
+
+      .weather-icon {
+        width: min(220px, 70vw);
+      }
+
+      .weather-readout {
+        gap: 12px;
+        font-size: 19px;
+      }
+
+      .weather-current {
+        font-size: 32px;
+      }
+
+      .weather-wind {
+        margin-top: -16px;
+        font-size: 13px;
+      }
+
+      .weather-location-button {
+        margin-top: -14px;
       }
 
       .banner-text {
@@ -1995,6 +2183,26 @@
         font-size: clamp(56px, 24vw, 86px);
       }
 
+      .weather-dashboard {
+        gap: 24px;
+      }
+
+      .weather-city {
+        font-size: 25px;
+      }
+
+      .weather-icon {
+        width: min(190px, 68vw);
+      }
+
+      .weather-readout {
+        font-size: 17px;
+      }
+
+      .weather-current {
+        font-size: 29px;
+      }
+
       .scroll-cta {
         bottom: calc(max(var(--edge), env(safe-area-inset-bottom)) + 62px);
       }
@@ -2084,6 +2292,28 @@
         transform: rotate(1turn);
       }
     }
+
+    @keyframes weatherCloudFloat {
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    @keyframes weatherRainFall {
+      0% {
+        opacity: 0.28;
+        transform: translateY(-8px);
+      }
+
+      45% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0.28;
+        transform: translateY(10px);
+      }
+    }
   </style>
 </head>
 <body>
@@ -2094,6 +2324,35 @@
     <div class="percent percent-white" aria-hidden="true">
       <span class="percent-value">0</span><span>%</span>
     </div>
+    <section class="weather-dashboard" aria-label="Weather dashboard">
+      <div class="weather-heading">
+        <p class="weather-city" aria-live="polite">Helsinki</p>
+        <p class="weather-condition">Light rain</p>
+      </div>
+      <svg class="weather-icon" viewBox="0 0 280 240" aria-hidden="true">
+        <g class="weather-cloud-group">
+          <path class="weather-cloud" d="M78 144c-27 0-49-21-49-47 0-24 18-43 42-46 10-31 39-53 74-53 37 0 68 24 78 58 25 3 44 24 44 50 0 28-23 50-52 50H78z"></path>
+        </g>
+        <line class="weather-rain" x1="96" y1="186" x2="82" y2="218"></line>
+        <line class="weather-rain" x1="146" y1="186" x2="132" y2="218"></line>
+        <line class="weather-rain" x1="198" y1="186" x2="184" y2="218"></line>
+        <line class="weather-rain" x1="236" y1="182" x2="224" y2="210"></line>
+      </svg>
+      <div class="weather-readout" aria-label="Low 10 degrees, current 12 degrees, high 14 degrees">
+        <span>10°</span>
+        <span class="weather-separator">/</span>
+        <strong class="weather-current">12°</strong>
+        <span class="weather-separator">/</span>
+        <span>14°</span>
+      </div>
+      <p class="weather-wind">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M11 2 5 13h6l-2 9 9-13h-6l2-7z"></path>
+        </svg>
+        <span>45 mph, SE direction</span>
+      </p>
+      <button class="weather-location-button" type="button">Use my location</button>
+    </section>
     <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false">
       <span aria-hidden="true"></span>
     </button>
@@ -2696,6 +2955,8 @@
     const menuButton = document.querySelector(".menu-button");
     const menuLinks = document.querySelectorAll(".menu-list a");
     const scrollCta = document.querySelector(".scroll-cta");
+    const weatherCity = document.querySelector(".weather-city");
+    const weatherLocationButton = document.querySelector(".weather-location-button");
     const learningSection = document.querySelector("#finnish-for-beginners");
     const prepSection = document.querySelector("#yki-preparation");
     const scrollCtaRing = document.querySelector(".scroll-cta-ring");
@@ -2710,6 +2971,7 @@
     let finishId = null;
     let menuFlowId = null;
     let initialHashHandled = false;
+    let weatherLocationRequested = false;
     let dialogiDbPromise = null;
     let activeDialogiRecording = null;
 
@@ -2750,6 +3012,102 @@
         timerId = null;
         finishId = null;
       }, duration);
+    }
+
+    function setWeatherCity(name) {
+      if (!weatherCity || !name) {
+        return;
+      }
+
+      weatherCity.textContent = name;
+    }
+
+    async function getCityFromCoordinates(coords) {
+      const endpoint = new URL("https://api.bigdatacloud.net/data/reverse-geocode-client");
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), 8000);
+
+      endpoint.searchParams.set("latitude", coords.latitude);
+      endpoint.searchParams.set("longitude", coords.longitude);
+      endpoint.searchParams.set("localityLanguage", "en");
+
+      try {
+        const response = await fetch(endpoint, {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error("Could not read location");
+        }
+
+        const data = await response.json();
+
+        return data.city || data.locality || data.principalSubdivision || data.countryName || "";
+      } finally {
+        window.clearTimeout(timeoutId);
+      }
+    }
+
+    function setWeatherLocationButtonLoading(loading) {
+      if (!weatherLocationButton) {
+        return;
+      }
+
+      weatherLocationButton.disabled = loading;
+      weatherLocationButton.textContent = loading ? "Locating" : "Use my location";
+    }
+
+    function requestWeatherLocation(userRequested = false) {
+      if (weatherLocationRequested || !weatherCity) {
+        return;
+      }
+
+      if (!window.navigator?.geolocation) {
+        if (userRequested) {
+          setWeatherCity("Location unavailable");
+        }
+
+        return;
+      }
+
+      const fallbackCity = weatherCity.textContent || "Helsinki";
+
+      weatherLocationRequested = true;
+      setWeatherCity("Locating");
+      setWeatherLocationButtonLoading(true);
+
+      window.navigator.geolocation.getCurrentPosition(async ({ coords }) => {
+        try {
+          const city = await getCityFromCoordinates(coords);
+
+          setWeatherCity(city || "Current location");
+          if (weatherLocationButton) {
+            weatherLocationButton.hidden = true;
+          }
+        } catch (error) {
+          setWeatherCity("Current location");
+        }
+
+        setWeatherLocationButtonLoading(false);
+      }, () => {
+        setWeatherCity(fallbackCity);
+        weatherLocationRequested = false;
+        setWeatherLocationButtonLoading(false);
+      }, {
+        enableHighAccuracy: false,
+        maximumAge: 600000,
+        timeout: 10000,
+      });
+    }
+
+    function maybeRequestWeatherLocation() {
+      const hash = window.location.hash;
+      const homeIsActive = !hash || hash === "#home";
+
+      if (body.classList.contains("is-loaded") && homeIsActive) {
+        requestWeatherLocation();
+      }
     }
 
     function buildScrollCtaRing() {
@@ -3194,6 +3552,7 @@
 
       setSpeakingPracticeOpen(hash === "#speaking-practice" || hash === "#dialogi-practice");
       setDialogiPracticeOpen(hash === "#dialogi-practice");
+      maybeRequestWeatherLocation();
     }
 
     function getCurrentHashTarget() {
@@ -3256,6 +3615,10 @@
         }
       });
     });
+
+    if (weatherLocationButton) {
+      weatherLocationButton.addEventListener("click", () => requestWeatherLocation(true));
+    }
 
     if (dialogiPoster) {
       function openDialogiPractice() {

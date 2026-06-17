@@ -165,68 +165,27 @@
     }
 
     .weather-icon {
+      display: grid;
+      place-items: center;
       width: min(260px, 72vw);
-      overflow: visible;
-      color: #fff;
-      filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.12));
+      aspect-ratio: 1;
+      filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.16));
     }
 
-    .weather-cloud-group {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: weatherCloudFloat 5.8s ease-in-out infinite;
+    .weather-symbol {
+      display: block;
+      width: min(250px, 70vw);
+      height: auto;
+      transition: opacity 220ms ease, transform 280ms ease;
     }
 
-    .weather-cloud {
-      fill: none;
-      stroke: currentColor;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-width: 12;
+    .weather-dashboard.weather-icon-loading .weather-symbol {
+      opacity: 0.68;
+      transform: scale(0.94);
     }
 
-    .weather-rain {
-      stroke: currentColor;
-      stroke-linecap: round;
-      stroke-width: 8;
-      opacity: 1;
-      animation: weatherRainFall 1.35s ease-in-out infinite;
-      transition: opacity 280ms ease, stroke-width 280ms ease, transform 280ms ease;
-    }
-
-    .weather-rain:nth-of-type(2) {
-      animation-delay: 180ms;
-    }
-
-    .weather-rain:nth-of-type(3) {
-      animation-delay: 360ms;
-    }
-
-    .weather-rain:nth-of-type(4) {
-      animation-delay: 90ms;
-    }
-
-    .weather-dashboard.weather-icon-dry .weather-rain,
-    .weather-dashboard.weather-icon-loading .weather-rain,
-    .weather-dashboard.weather-icon-unavailable .weather-rain {
-      opacity: 0;
-      animation: none;
-      transform: translateY(10px);
-    }
-
-    .weather-dashboard.weather-icon-light-rain .weather-rain:nth-of-type(3),
-    .weather-dashboard.weather-icon-light-rain .weather-rain:nth-of-type(4) {
-      opacity: 0.28;
-      stroke-width: 5;
-    }
-
-    .weather-dashboard.weather-icon-rain .weather-rain {
-      stroke-width: 8;
-    }
-
-    .weather-dashboard.weather-icon-heavy-rain .weather-rain {
-      stroke-width: 10;
-      animation-duration: 0.92s;
+    .weather-dashboard.weather-icon-dry .weather-symbol {
+      animation: weatherSymbolPulse 5.2s ease-in-out infinite;
     }
 
     .weather-readout {
@@ -1878,8 +1837,7 @@
         animation: none;
       }
 
-      .weather-cloud-group,
-      .weather-rain {
+      .weather-symbol {
         animation: none;
       }
 
@@ -2363,25 +2321,9 @@
       }
     }
 
-    @keyframes weatherCloudFloat {
+    @keyframes weatherSymbolPulse {
       50% {
-        transform: translateY(-6px);
-      }
-    }
-
-    @keyframes weatherRainFall {
-      0% {
-        opacity: 0.28;
-        transform: translateY(-8px);
-      }
-
-      45% {
-        opacity: 1;
-      }
-
-      100% {
-        opacity: 0.28;
-        transform: translateY(10px);
+        transform: scale(1.04);
       }
     }
   </style>
@@ -2399,15 +2341,9 @@
         <p class="weather-city" aria-live="polite">Helsinki</p>
         <p class="weather-condition" aria-live="polite">Loading FMI data</p>
       </div>
-      <svg class="weather-icon" viewBox="0 0 280 240" aria-hidden="true">
-        <g class="weather-cloud-group">
-          <path class="weather-cloud" d="M78 144c-27 0-49-21-49-47 0-24 18-43 42-46 10-31 39-53 74-53 37 0 68 24 78 58 25 3 44 24 44 50 0 28-23 50-52 50H78z"></path>
-        </g>
-        <line class="weather-rain" x1="96" y1="186" x2="82" y2="218"></line>
-        <line class="weather-rain" x1="146" y1="186" x2="132" y2="218"></line>
-        <line class="weather-rain" x1="198" y1="186" x2="184" y2="218"></line>
-        <line class="weather-rain" x1="236" y1="182" x2="224" y2="210"></line>
-      </svg>
+      <div class="weather-icon" aria-hidden="true">
+        <img class="weather-symbol" src="https://cdn.fmi.fi/symbol-images/smartsymbol/v3/p/101.svg" alt="">
+      </div>
       <div class="weather-readout" aria-label="Observed low 10 degrees, current 12 degrees, high 14 degrees">
         <span class="weather-low">10°</span>
         <span class="weather-separator">/</span>
@@ -3032,6 +2968,7 @@
     const weatherLow = document.querySelector(".weather-low");
     const weatherCurrent = document.querySelector(".weather-current");
     const weatherHigh = document.querySelector(".weather-high");
+    const weatherSymbolImage = document.querySelector(".weather-symbol");
     const weatherWindText = document.querySelector(".weather-wind-text");
     const weatherLocationButton = document.querySelector(".weather-location-button");
     const learningSection = document.querySelector("#finnish-for-beginners");
@@ -3044,7 +2981,17 @@
     const dialogiTurns = document.querySelectorAll("[data-dialogi-turn]");
     const skipLoader = new URLSearchParams(window.location.search).get("skipLoader") === "1";
     const defaultWeatherPlace = "Helsinki";
+    const fmiWeatherSymbolBaseUrl = "https://cdn.fmi.fi/symbol-images/smartsymbol/v3/p/";
+    const fmiWeatherSymbols = {
+      dry: { code: "101", label: "clear" },
+      "light-rain": { code: "137", label: "light rain" },
+      rain: { code: "138", label: "moderate rain" },
+      "heavy-rain": { code: "139", label: "heavy rain" },
+      loading: { code: "101", label: "loading weather" },
+      unavailable: { code: "107", label: "weather unavailable" },
+    };
     const fmiWeatherParameters = "t2m,ws_10min,wd_10min,r_1h";
+    const weatherRefreshIntervalMs = 10 * 60 * 1000;
     const startTime = Date.now();
     let timerId = null;
     let finishId = null;
@@ -3052,6 +2999,7 @@
     let initialHashHandled = false;
     let weatherLocationRequested = false;
     let fmiWeatherRequested = false;
+    let weatherRefreshTimer = null;
     let activeWeatherPlace = defaultWeatherPlace;
     let activeWeatherRequestId = 0;
     let dialogiDbPromise = null;
@@ -3123,6 +3071,8 @@
         return;
       }
 
+      const symbol = fmiWeatherSymbols[state] || fmiWeatherSymbols.dry;
+
       weatherDashboard.classList.remove(
         "weather-icon-dry",
         "weather-icon-light-rain",
@@ -3132,6 +3082,12 @@
         "weather-icon-unavailable"
       );
       weatherDashboard.classList.add(`weather-icon-${state}`);
+
+      if (weatherSymbolImage && weatherSymbolImage.dataset.symbolCode !== symbol.code) {
+        weatherSymbolImage.src = `${fmiWeatherSymbolBaseUrl}${symbol.code}.svg`;
+        weatherSymbolImage.alt = symbol.label;
+        weatherSymbolImage.dataset.symbolCode = symbol.code;
+      }
     }
 
     function formatDegree(value) {
@@ -3366,13 +3322,16 @@
 
     async function refreshFmiWeather(place = defaultWeatherPlace, options = {}) {
       const allowFallback = options.allowFallback !== false;
+      const showLoading = options.showLoading !== false;
       const weatherPlace = normalizeWeatherPlace(place);
       const requestId = activeWeatherRequestId + 1;
 
       activeWeatherRequestId = requestId;
-      setWeatherCondition("Loading FMI data");
-      setWeatherIconState("loading");
-      hideWeatherWind();
+      if (showLoading) {
+        setWeatherCondition("Loading FMI data");
+        setWeatherIconState("loading");
+        hideWeatherWind();
+      }
 
       try {
         const weather = await fetchFmiWeather(weatherPlace);
@@ -3482,17 +3441,50 @@
       });
     }
 
-    function maybeRequestWeatherLocation() {
+    function weatherHomeIsActive() {
       const hash = window.location.hash;
-      const homeIsActive = !hash || hash === "#home";
+
+      return !hash || hash === "#home";
+    }
+
+    function stopFmiWeatherUpdates() {
+      if (weatherRefreshTimer !== null) {
+        window.clearInterval(weatherRefreshTimer);
+        weatherRefreshTimer = null;
+      }
+    }
+
+    function startFmiWeatherUpdates() {
+      if (!weatherHomeIsActive()) {
+        stopFmiWeatherUpdates();
+        return;
+      }
+
+      if (!fmiWeatherRequested) {
+        fmiWeatherRequested = true;
+        refreshFmiWeather(activeWeatherPlace, { allowFallback: false });
+      }
+
+      if (weatherRefreshTimer === null) {
+        weatherRefreshTimer = window.setInterval(() => {
+          if (weatherHomeIsActive()) {
+            refreshFmiWeather(activeWeatherPlace, {
+              allowFallback: false,
+              showLoading: false,
+            });
+          }
+        }, weatherRefreshIntervalMs);
+      }
+    }
+
+    function maybeRequestWeatherLocation() {
+      const homeIsActive = weatherHomeIsActive();
 
       if (body.classList.contains("is-loaded") && homeIsActive) {
-        if (!fmiWeatherRequested) {
-          fmiWeatherRequested = true;
-          refreshFmiWeather(activeWeatherPlace, { allowFallback: false });
-        }
-
+        startFmiWeatherUpdates();
         requestWeatherLocation();
+      } else {
+        stopFmiWeatherUpdates();
       }
     }
 

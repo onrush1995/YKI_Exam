@@ -168,65 +168,87 @@
       width: min(260px, 72vw);
       overflow: visible;
       color: #fff;
-      filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.12));
+      filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.16));
     }
 
-    .weather-cloud-group {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: weatherCloudFloat 5.8s ease-in-out infinite;
-    }
-
-    .weather-cloud {
+    .weather-cloud-shape,
+    .weather-sun-ring,
+    .weather-sun-ray,
+    .weather-rain-drop,
+    .weather-symbol-question {
       fill: none;
-      stroke: currentColor;
       stroke-linecap: round;
       stroke-linejoin: round;
+    }
+
+    .weather-cloud-shape,
+    .weather-symbol-question {
+      stroke: #fff;
+      stroke-width: 13;
+    }
+
+    .weather-sun-ring,
+    .weather-sun-ray {
+      stroke: #f2a51a;
+      opacity: 0;
+      transition: opacity 220ms ease, transform 280ms ease;
+    }
+
+    .weather-sun-ring {
       stroke-width: 12;
     }
 
-    .weather-rain {
-      stroke: currentColor;
-      stroke-linecap: round;
-      stroke-width: 8;
-      opacity: 1;
-      animation: weatherRainFall 1.35s ease-in-out infinite;
-      transition: opacity 280ms ease, stroke-width 280ms ease, transform 280ms ease;
+    .weather-sun-ray {
+      stroke-width: 9;
     }
 
-    .weather-rain:nth-of-type(2) {
-      animation-delay: 180ms;
-    }
-
-    .weather-rain:nth-of-type(3) {
-      animation-delay: 360ms;
-    }
-
-    .weather-rain:nth-of-type(4) {
-      animation-delay: 90ms;
-    }
-
-    .weather-dashboard.weather-icon-dry .weather-rain,
-    .weather-dashboard.weather-icon-loading .weather-rain,
-    .weather-dashboard.weather-icon-unavailable .weather-rain {
-      opacity: 0;
-      animation: none;
-      transform: translateY(10px);
-    }
-
-    .weather-dashboard.weather-icon-light-rain .weather-rain:nth-of-type(3),
-    .weather-dashboard.weather-icon-light-rain .weather-rain:nth-of-type(4) {
-      opacity: 0.28;
-      stroke-width: 5;
-    }
-
-    .weather-dashboard.weather-icon-rain .weather-rain {
-      stroke-width: 8;
-    }
-
-    .weather-dashboard.weather-icon-heavy-rain .weather-rain {
+    .weather-rain-drop {
+      stroke: #54a9cf;
       stroke-width: 10;
-      animation-duration: 0.92s;
+      opacity: 0;
+      transition: opacity 220ms ease, transform 280ms ease;
+    }
+
+    .weather-symbol-cloud {
+      opacity: 1;
+      transform-box: fill-box;
+      transform-origin: center;
+      transition: opacity 220ms ease, transform 280ms ease;
+    }
+
+    .weather-dashboard.weather-icon-loading .weather-symbol-cloud {
+      opacity: 0.68;
+      transform: scale(0.94);
+    }
+
+    .weather-dashboard.weather-icon-dry .weather-symbol-cloud {
+      opacity: 0;
+      transform: translateY(10px) scale(0.84);
+    }
+
+    .weather-dashboard.weather-icon-dry .weather-sun-ring,
+    .weather-dashboard.weather-icon-dry .weather-sun-ray {
+      opacity: 1;
+      animation: weatherSymbolPulse 5.2s ease-in-out infinite;
+    }
+
+    .weather-dashboard.weather-icon-light-rain .weather-rain-drop:nth-of-type(-n + 2),
+    .weather-dashboard.weather-icon-rain .weather-rain-drop,
+    .weather-dashboard.weather-icon-heavy-rain .weather-rain-drop {
+      opacity: 1;
+    }
+
+    .weather-dashboard.weather-icon-heavy-rain .weather-rain-drop {
+      stroke-width: 12;
+    }
+
+    .weather-dashboard.weather-icon-unavailable .weather-symbol-question {
+      opacity: 1;
+    }
+
+    .weather-symbol-question {
+      opacity: 0;
+      transition: opacity 220ms ease;
     }
 
     .weather-readout {
@@ -1878,8 +1900,8 @@
         animation: none;
       }
 
-      .weather-cloud-group,
-      .weather-rain {
+      .weather-sun-ring,
+      .weather-sun-ray {
         animation: none;
       }
 
@@ -2363,25 +2385,9 @@
       }
     }
 
-    @keyframes weatherCloudFloat {
+    @keyframes weatherSymbolPulse {
       50% {
-        transform: translateY(-6px);
-      }
-    }
-
-    @keyframes weatherRainFall {
-      0% {
-        opacity: 0.28;
-        transform: translateY(-8px);
-      }
-
-      45% {
-        opacity: 1;
-      }
-
-      100% {
-        opacity: 0.28;
-        transform: translateY(10px);
+        transform: scale(1.04);
       }
     }
   </style>
@@ -2400,13 +2406,27 @@
         <p class="weather-condition" aria-live="polite">Loading FMI data</p>
       </div>
       <svg class="weather-icon" viewBox="0 0 280 240" aria-hidden="true">
-        <g class="weather-cloud-group">
-          <path class="weather-cloud" d="M78 144c-27 0-49-21-49-47 0-24 18-43 42-46 10-31 39-53 74-53 37 0 68 24 78 58 25 3 44 24 44 50 0 28-23 50-52 50H78z"></path>
+        <g class="weather-symbol-sun">
+          <circle class="weather-sun-ring" cx="140" cy="112" r="44"></circle>
+          <line class="weather-sun-ray" x1="140" y1="36" x2="140" y2="56"></line>
+          <line class="weather-sun-ray" x1="140" y1="168" x2="140" y2="188"></line>
+          <line class="weather-sun-ray" x1="64" y1="112" x2="84" y2="112"></line>
+          <line class="weather-sun-ray" x1="196" y1="112" x2="216" y2="112"></line>
+          <line class="weather-sun-ray" x1="86" y1="58" x2="100" y2="72"></line>
+          <line class="weather-sun-ray" x1="180" y1="152" x2="194" y2="166"></line>
+          <line class="weather-sun-ray" x1="194" y1="58" x2="180" y2="72"></line>
+          <line class="weather-sun-ray" x1="100" y1="152" x2="86" y2="166"></line>
         </g>
-        <line class="weather-rain" x1="96" y1="186" x2="82" y2="218"></line>
-        <line class="weather-rain" x1="146" y1="186" x2="132" y2="218"></line>
-        <line class="weather-rain" x1="198" y1="186" x2="184" y2="218"></line>
-        <line class="weather-rain" x1="236" y1="182" x2="224" y2="210"></line>
+        <g class="weather-symbol-cloud">
+          <path class="weather-cloud-shape" d="M72 142c-27 0-49-21-49-47 0-24 18-43 42-46 10-31 39-53 74-53 37 0 68 24 78 58 25 3 44 24 44 50 0 28-23 50-52 50H72"></path>
+        </g>
+        <g class="weather-symbol-rain">
+          <line class="weather-rain-drop" x1="102" y1="174" x2="88" y2="206"></line>
+          <line class="weather-rain-drop" x1="148" y1="174" x2="134" y2="206"></line>
+          <line class="weather-rain-drop" x1="194" y1="174" x2="180" y2="206"></line>
+        </g>
+        <path class="weather-symbol-question" d="M126 93c6-13 19-21 34-21 18 0 33 12 33 29 0 14-8 22-21 30-11 7-15 12-15 25"></path>
+        <circle class="weather-symbol-question" cx="157" cy="185" r="2"></circle>
       </svg>
       <div class="weather-readout" aria-label="Observed low 10 degrees, current 12 degrees, high 14 degrees">
         <span class="weather-low">10°</span>
@@ -3045,6 +3065,7 @@
     const skipLoader = new URLSearchParams(window.location.search).get("skipLoader") === "1";
     const defaultWeatherPlace = "Helsinki";
     const fmiWeatherParameters = "t2m,ws_10min,wd_10min,r_1h";
+    const weatherRefreshIntervalMs = 10 * 60 * 1000;
     const startTime = Date.now();
     let timerId = null;
     let finishId = null;
@@ -3052,6 +3073,7 @@
     let initialHashHandled = false;
     let weatherLocationRequested = false;
     let fmiWeatherRequested = false;
+    let weatherRefreshTimer = null;
     let activeWeatherPlace = defaultWeatherPlace;
     let activeWeatherRequestId = 0;
     let dialogiDbPromise = null;
@@ -3366,13 +3388,16 @@
 
     async function refreshFmiWeather(place = defaultWeatherPlace, options = {}) {
       const allowFallback = options.allowFallback !== false;
+      const showLoading = options.showLoading !== false;
       const weatherPlace = normalizeWeatherPlace(place);
       const requestId = activeWeatherRequestId + 1;
 
       activeWeatherRequestId = requestId;
-      setWeatherCondition("Loading FMI data");
-      setWeatherIconState("loading");
-      hideWeatherWind();
+      if (showLoading) {
+        setWeatherCondition("Loading FMI data");
+        setWeatherIconState("loading");
+        hideWeatherWind();
+      }
 
       try {
         const weather = await fetchFmiWeather(weatherPlace);
@@ -3482,17 +3507,50 @@
       });
     }
 
-    function maybeRequestWeatherLocation() {
+    function weatherHomeIsActive() {
       const hash = window.location.hash;
-      const homeIsActive = !hash || hash === "#home";
+
+      return !hash || hash === "#home";
+    }
+
+    function stopFmiWeatherUpdates() {
+      if (weatherRefreshTimer !== null) {
+        window.clearInterval(weatherRefreshTimer);
+        weatherRefreshTimer = null;
+      }
+    }
+
+    function startFmiWeatherUpdates() {
+      if (!weatherHomeIsActive()) {
+        stopFmiWeatherUpdates();
+        return;
+      }
+
+      if (!fmiWeatherRequested) {
+        fmiWeatherRequested = true;
+        refreshFmiWeather(activeWeatherPlace, { allowFallback: false });
+      }
+
+      if (weatherRefreshTimer === null) {
+        weatherRefreshTimer = window.setInterval(() => {
+          if (weatherHomeIsActive()) {
+            refreshFmiWeather(activeWeatherPlace, {
+              allowFallback: false,
+              showLoading: false,
+            });
+          }
+        }, weatherRefreshIntervalMs);
+      }
+    }
+
+    function maybeRequestWeatherLocation() {
+      const homeIsActive = weatherHomeIsActive();
 
       if (body.classList.contains("is-loaded") && homeIsActive) {
-        if (!fmiWeatherRequested) {
-          fmiWeatherRequested = true;
-          refreshFmiWeather(activeWeatherPlace, { allowFallback: false });
-        }
-
+        startFmiWeatherUpdates();
         requestWeatherLocation();
+      } else {
+        stopFmiWeatherUpdates();
       }
     }
 

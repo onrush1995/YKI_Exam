@@ -165,90 +165,27 @@
     }
 
     .weather-icon {
+      display: grid;
+      place-items: center;
       width: min(260px, 72vw);
-      overflow: visible;
-      color: #fff;
+      aspect-ratio: 1;
       filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.16));
     }
 
-    .weather-cloud-shape,
-    .weather-sun-ring,
-    .weather-sun-ray,
-    .weather-rain-drop,
-    .weather-symbol-question {
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .weather-cloud-shape,
-    .weather-symbol-question {
-      stroke: #fff;
-      stroke-width: 13;
-    }
-
-    .weather-sun-ring,
-    .weather-sun-ray {
-      stroke: #f2a51a;
-      opacity: 0;
+    .weather-symbol {
+      display: block;
+      width: min(250px, 70vw);
+      height: auto;
       transition: opacity 220ms ease, transform 280ms ease;
     }
 
-    .weather-sun-ring {
-      stroke-width: 12;
-    }
-
-    .weather-sun-ray {
-      stroke-width: 9;
-    }
-
-    .weather-rain-drop {
-      stroke: #54a9cf;
-      stroke-width: 10;
-      opacity: 0;
-      transition: opacity 220ms ease, transform 280ms ease;
-    }
-
-    .weather-symbol-cloud {
-      opacity: 1;
-      transform-box: fill-box;
-      transform-origin: center;
-      transition: opacity 220ms ease, transform 280ms ease;
-    }
-
-    .weather-dashboard.weather-icon-loading .weather-symbol-cloud {
+    .weather-dashboard.weather-icon-loading .weather-symbol {
       opacity: 0.68;
       transform: scale(0.94);
     }
 
-    .weather-dashboard.weather-icon-dry .weather-symbol-cloud {
-      opacity: 0;
-      transform: translateY(10px) scale(0.84);
-    }
-
-    .weather-dashboard.weather-icon-dry .weather-sun-ring,
-    .weather-dashboard.weather-icon-dry .weather-sun-ray {
-      opacity: 1;
+    .weather-dashboard.weather-icon-dry .weather-symbol {
       animation: weatherSymbolPulse 5.2s ease-in-out infinite;
-    }
-
-    .weather-dashboard.weather-icon-light-rain .weather-rain-drop:nth-of-type(-n + 2),
-    .weather-dashboard.weather-icon-rain .weather-rain-drop,
-    .weather-dashboard.weather-icon-heavy-rain .weather-rain-drop {
-      opacity: 1;
-    }
-
-    .weather-dashboard.weather-icon-heavy-rain .weather-rain-drop {
-      stroke-width: 12;
-    }
-
-    .weather-dashboard.weather-icon-unavailable .weather-symbol-question {
-      opacity: 1;
-    }
-
-    .weather-symbol-question {
-      opacity: 0;
-      transition: opacity 220ms ease;
     }
 
     .weather-readout {
@@ -1900,8 +1837,7 @@
         animation: none;
       }
 
-      .weather-sun-ring,
-      .weather-sun-ray {
+      .weather-symbol {
         animation: none;
       }
 
@@ -2405,29 +2341,9 @@
         <p class="weather-city" aria-live="polite">Helsinki</p>
         <p class="weather-condition" aria-live="polite">Loading FMI data</p>
       </div>
-      <svg class="weather-icon" viewBox="0 0 280 240" aria-hidden="true">
-        <g class="weather-symbol-sun">
-          <circle class="weather-sun-ring" cx="140" cy="112" r="44"></circle>
-          <line class="weather-sun-ray" x1="140" y1="36" x2="140" y2="56"></line>
-          <line class="weather-sun-ray" x1="140" y1="168" x2="140" y2="188"></line>
-          <line class="weather-sun-ray" x1="64" y1="112" x2="84" y2="112"></line>
-          <line class="weather-sun-ray" x1="196" y1="112" x2="216" y2="112"></line>
-          <line class="weather-sun-ray" x1="86" y1="58" x2="100" y2="72"></line>
-          <line class="weather-sun-ray" x1="180" y1="152" x2="194" y2="166"></line>
-          <line class="weather-sun-ray" x1="194" y1="58" x2="180" y2="72"></line>
-          <line class="weather-sun-ray" x1="100" y1="152" x2="86" y2="166"></line>
-        </g>
-        <g class="weather-symbol-cloud">
-          <path class="weather-cloud-shape" d="M72 142c-27 0-49-21-49-47 0-24 18-43 42-46 10-31 39-53 74-53 37 0 68 24 78 58 25 3 44 24 44 50 0 28-23 50-52 50H72"></path>
-        </g>
-        <g class="weather-symbol-rain">
-          <line class="weather-rain-drop" x1="102" y1="174" x2="88" y2="206"></line>
-          <line class="weather-rain-drop" x1="148" y1="174" x2="134" y2="206"></line>
-          <line class="weather-rain-drop" x1="194" y1="174" x2="180" y2="206"></line>
-        </g>
-        <path class="weather-symbol-question" d="M126 93c6-13 19-21 34-21 18 0 33 12 33 29 0 14-8 22-21 30-11 7-15 12-15 25"></path>
-        <circle class="weather-symbol-question" cx="157" cy="185" r="2"></circle>
-      </svg>
+      <div class="weather-icon" aria-hidden="true">
+        <img class="weather-symbol" src="https://cdn.fmi.fi/symbol-images/smartsymbol/v3/p/101.svg" alt="">
+      </div>
       <div class="weather-readout" aria-label="Observed low 10 degrees, current 12 degrees, high 14 degrees">
         <span class="weather-low">10°</span>
         <span class="weather-separator">/</span>
@@ -3052,6 +2968,7 @@
     const weatherLow = document.querySelector(".weather-low");
     const weatherCurrent = document.querySelector(".weather-current");
     const weatherHigh = document.querySelector(".weather-high");
+    const weatherSymbolImage = document.querySelector(".weather-symbol");
     const weatherWindText = document.querySelector(".weather-wind-text");
     const weatherLocationButton = document.querySelector(".weather-location-button");
     const learningSection = document.querySelector("#finnish-for-beginners");
@@ -3064,6 +2981,15 @@
     const dialogiTurns = document.querySelectorAll("[data-dialogi-turn]");
     const skipLoader = new URLSearchParams(window.location.search).get("skipLoader") === "1";
     const defaultWeatherPlace = "Helsinki";
+    const fmiWeatherSymbolBaseUrl = "https://cdn.fmi.fi/symbol-images/smartsymbol/v3/p/";
+    const fmiWeatherSymbols = {
+      dry: { code: "101", label: "clear" },
+      "light-rain": { code: "137", label: "light rain" },
+      rain: { code: "138", label: "moderate rain" },
+      "heavy-rain": { code: "139", label: "heavy rain" },
+      loading: { code: "101", label: "loading weather" },
+      unavailable: { code: "107", label: "weather unavailable" },
+    };
     const fmiWeatherParameters = "t2m,ws_10min,wd_10min,r_1h";
     const weatherRefreshIntervalMs = 10 * 60 * 1000;
     const startTime = Date.now();
@@ -3145,6 +3071,8 @@
         return;
       }
 
+      const symbol = fmiWeatherSymbols[state] || fmiWeatherSymbols.dry;
+
       weatherDashboard.classList.remove(
         "weather-icon-dry",
         "weather-icon-light-rain",
@@ -3154,6 +3082,12 @@
         "weather-icon-unavailable"
       );
       weatherDashboard.classList.add(`weather-icon-${state}`);
+
+      if (weatherSymbolImage && weatherSymbolImage.dataset.symbolCode !== symbol.code) {
+        weatherSymbolImage.src = `${fmiWeatherSymbolBaseUrl}${symbol.code}.svg`;
+        weatherSymbolImage.alt = symbol.label;
+        weatherSymbolImage.dataset.symbolCode = symbol.code;
+      }
     }
 
     function formatDegree(value) {

@@ -2991,6 +2991,7 @@
       unavailable: { code: "107", label: "weather unavailable" },
     };
     const fmiWeatherParameters = "t2m,ws_10min,wd_10min,r_1h";
+    const fmiForecastSymbolParameters = "SmartSymbol";
     const weatherRefreshIntervalMs = 10 * 60 * 1000;
     const startTime = Date.now();
     let timerId = null;
@@ -3066,12 +3067,15 @@
       weatherCondition.textContent = text || "";
     }
 
-    function setWeatherIconState(state) {
+    function setWeatherIconState(state, symbolCode = "") {
       if (!weatherDashboard) {
         return;
       }
 
-      const symbol = fmiWeatherSymbols[state] || fmiWeatherSymbols.dry;
+      const symbol = symbolCode ? {
+        code: symbolCode,
+        label: "FMI weather symbol",
+      } : fmiWeatherSymbols[state] || fmiWeatherSymbols.dry;
 
       weatherDashboard.classList.remove(
         "weather-icon-dry",
@@ -3181,6 +3185,33 @@
       return values.length ? values[values.length - 1].value : NaN;
     }
 
+    function getNearestFmiValue(valuesByParameter, parameterName) {
+      const values = valuesByParameter.get(parameterName) || [];
+      const now = Date.now();
+
+      if (!values.length) {
+        return NaN;
+      }
+
+      const upcoming = values.find((row) => row.timeStamp >= now);
+
+      return upcoming ? upcoming.value : values[values.length - 1].value;
+    }
+
+    function normalizeFmiSymbolCode(value) {
+      if (!Number.isFinite(value)) {
+        return "";
+      }
+
+      const code = Math.round(value);
+
+      if (code <= 0) {
+        return "";
+      }
+
+      return String(code < 100 ? code + 100 : code);
+    }
+
     function getFmiValuesByParameter(xmlText) {
       const xml = new DOMParser().parseFromString(xmlText, "application/xml");
 
@@ -3222,6 +3253,12 @@
       };
     }
 
+    function parseFmiSymbolXml(xmlText) {
+      const valuesByParameter = getFmiValuesByParameter(xmlText);
+
+      return normalizeFmiSymbolCode(getNearestFmiValue(valuesByParameter, "SmartSymbol"));
+    }
+
     function parseFmiWeatherXml(xmlText) {
       const valuesByParameter = getFmiValuesByParameter(xmlText);
 
@@ -3256,6 +3293,21 @@
       return endpoint;
     }
 
+    function buildFmiForecastUrl(place, parameters = fmiForecastSymbolParameters) {
+      const endpoint = new URL("https://opendata.fmi.fi/wfs");
+
+      endpoint.searchParams.set("service", "WFS");
+      endpoint.searchParams.set("version", "2.0.0");
+      endpoint.searchParams.set("request", "getFeature");
+      endpoint.searchParams.set("storedquery_id", "fmi::forecast::harmonie::surface::point::simple");
+      endpoint.searchParams.set("place", place);
+      endpoint.searchParams.set("parameters", parameters);
+      endpoint.searchParams.set("maxlocations", "1");
+      endpoint.searchParams.set("timestep", "60");
+
+      return endpoint;
+    }
+
     async function fetchFmiXml(place, parameters = fmiWeatherParameters, maxLocations = "1") {
       const controller = new AbortController();
       const timeoutId = window.setTimeout(() => controller.abort(), 10000);
@@ -3276,17 +3328,44 @@
       }
     }
 
-    async function fetchFmiWeather(place) {
-      const weather = parseFmiWeatherXml(await fetchFmiXml(place));
+    async function fetchFmiForecastSymbol(place) {
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), 10000);
 
-      if (Number.isFinite(weather.windSpeed) && Number.isFinite(weather.windDirection)) {
-        return weather;
+      try {
+        const response = await fetch(buildFmiForecastUrl(place), {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error("FMI symbol request failed");
+        }
+
+        return parseFmiSymbolXml(await response.text());
+      } finally {
+        window.clearTimeout(timeoutId);
+      }
+    }
+
+    async function fetchFmiWeather(place) {
+      let weather = parseFmiWeatherXml(await fetchFmiXml(place));
+
+      if (!Number.isFinite(weather.windSpeed) || !Number.isFinite(weather.windDirection)) {
+        try {
+          weather = {
+            ...weather,
+            ...parseFmiWindXml(await fetchFmiXml(place, "ws_10min,wd_10min", "5")),
+          };
+        } catch (error) {
+          weather = { ...weather };
+        }
       }
 
       try {
         return {
           ...weather,
-          ...parseFmiWindXml(await fetchFmiXml(place, "ws_10min,wd_10min", "5")),
+          symbolCode: await fetchFmiForecastSymbol(place),
         };
       } catch (error) {
         return weather;
@@ -3296,7 +3375,7 @@
     function applyFmiWeather(weather, place) {
       setWeatherCity(place);
       setWeatherCondition(describeRainCondition(weather.rainAmount));
-      setWeatherIconState(getRainIconState(weather.rainAmount));
+      setWeatherIconState(getRainIconState(weather.rainAmount), weather.symbolCode);
 
       if (weatherLow) {
         weatherLow.textContent = formatDegree(weather.lowTemp);

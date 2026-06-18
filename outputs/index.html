@@ -112,8 +112,9 @@
       z-index: 1;
       display: grid;
       width: min(420px, calc(100vw - (max(var(--edge), env(safe-area-inset-left)) * 2)));
+      align-content: center;
       justify-items: center;
-      gap: 38px;
+      gap: clamp(20px, 4.5dvh, 38px);
       color: #fff;
       opacity: 0;
       pointer-events: none;
@@ -138,25 +139,31 @@
     .weather-heading {
       display: grid;
       gap: 4px;
+      max-width: 100%;
+      justify-items: center;
       text-transform: uppercase;
     }
 
     .weather-city {
+      max-width: 100%;
       margin: 0;
-      font-size: 32px;
+      overflow-wrap: anywhere;
+      font-size: clamp(26px, 6vw, 32px);
       font-weight: 900;
       letter-spacing: 0;
-      line-height: 1;
+      line-height: 1.04;
       text-shadow: 0 0 22px rgba(255, 255, 255, 0.16);
     }
 
     .weather-condition {
+      max-width: 100%;
       margin: 0;
       color: #9a9a9a;
-      font-size: 17px;
+      font-size: clamp(14px, 3.4vw, 17px);
       font-weight: 850;
       letter-spacing: 0;
       line-height: 1.1;
+      overflow-wrap: anywhere;
       text-shadow: 0 0 18px rgba(255, 255, 255, 0.1);
     }
 
@@ -167,14 +174,14 @@
     .weather-icon {
       display: grid;
       place-items: center;
-      width: min(260px, 72vw);
+      width: min(260px, 62vw, 32dvh);
       aspect-ratio: 1;
       filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.16));
     }
 
     .weather-symbol {
       display: block;
-      width: min(250px, 70vw);
+      width: 100%;
       height: auto;
       transition: opacity 220ms ease, transform 280ms ease;
     }
@@ -192,9 +199,10 @@
       display: flex;
       align-items: baseline;
       justify-content: center;
-      gap: 16px;
+      gap: clamp(10px, 3vw, 16px);
+      max-width: 100%;
       color: #7e7e7e;
-      font-size: 22px;
+      font-size: clamp(18px, 4vw, 22px);
       font-weight: 850;
       line-height: 1;
       text-shadow: 0 0 18px rgba(255, 255, 255, 0.08);
@@ -202,7 +210,7 @@
 
     .weather-current {
       color: #fff;
-      font-size: 36px;
+      font-size: clamp(30px, 7vw, 36px);
       font-weight: 950;
     }
 
@@ -213,12 +221,15 @@
     .weather-wind {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 10px;
-      margin: -10px 0 0;
+      max-width: 100%;
+      margin: -6px 0 0;
       color: #fff;
-      font-size: 17px;
+      font-size: clamp(13px, 3.4vw, 17px);
       font-weight: 900;
       line-height: 1.2;
+      text-align: center;
       text-shadow: 0 0 18px rgba(255, 255, 255, 0.12);
     }
 
@@ -235,7 +246,7 @@
 
     .weather-location-button {
       min-height: 38px;
-      margin-top: -20px;
+      margin-top: -10px;
       border: 1px solid rgba(255, 255, 255, 0.34);
       border-radius: 999px;
       background: transparent;
@@ -1963,37 +1974,38 @@
       }
 
       .weather-dashboard {
-        gap: 30px;
+        width: min(360px, calc(100vw - (max(var(--edge), env(safe-area-inset-left)) * 2)));
+        gap: clamp(14px, 3dvh, 24px);
       }
 
       .weather-city {
-        font-size: 28px;
+        font-size: clamp(24px, 8vw, 28px);
       }
 
       .weather-condition {
-        font-size: 15px;
+        font-size: clamp(13px, 4vw, 15px);
       }
 
       .weather-icon {
-        width: min(220px, 70vw);
+        width: min(210px, 54vw, 30dvh);
       }
 
       .weather-readout {
-        gap: 12px;
-        font-size: 19px;
+        gap: clamp(8px, 3vw, 12px);
+        font-size: clamp(16px, 5vw, 19px);
       }
 
       .weather-current {
-        font-size: 32px;
+        font-size: clamp(28px, 9vw, 32px);
       }
 
       .weather-wind {
-        margin-top: -8px;
-        font-size: 14px;
+        margin-top: 0;
+        font-size: clamp(12px, 3.8vw, 14px);
       }
 
       .weather-location-button {
-        margin-top: -14px;
+        margin-top: 0;
       }
 
       .banner-text {
@@ -2238,17 +2250,33 @@
       }
 
       body.is-loaded .weather-dashboard {
-        gap: 14px;
-        transform: translateY(-72px) scale(0.86);
+        gap: clamp(10px, 2dvh, 14px);
+        transform: translateY(0) scale(1);
       }
 
       .weather-icon {
-        width: min(170px, 56vw);
+        width: min(160px, 48vw, 26dvh);
+      }
+
+      .weather-city {
+        font-size: clamp(21px, 7vw, 25px);
+      }
+
+      .weather-readout {
+        font-size: clamp(15px, 4.5vw, 17px);
+      }
+
+      .weather-current {
+        font-size: clamp(25px, 8vw, 30px);
+      }
+
+      .weather-wind {
+        font-size: clamp(11px, 3.5vw, 13px);
       }
 
       .weather-location-button {
         min-height: 34px;
-        margin-top: -8px;
+        margin-top: 0;
         padding: 0 14px;
       }
 
